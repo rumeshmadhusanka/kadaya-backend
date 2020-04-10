@@ -1,0 +1,30 @@
+{
+  "name": "kadaya-backend",
+  "version": "1.0.0",
+  "description": "kadaya-backend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -e yaml,js,json app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "dependencies": {
+    "@types/pg": "^7.14.3",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.0.0"
+  },
+  "devDependencies": {}
+}
