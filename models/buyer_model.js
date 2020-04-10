@@ -41,8 +41,27 @@ class Buyer {
 
     }
 
+    async addNewBuyer(firebase_id, name, email, address, phone, latitude, longitude){
+        let query_str = "INSERT INTO public.buyer(firebase_id, name, email, address, phone, latitude, longitude) values (($1),($2),($3),($4),($5),($6),($7))";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await pg_pool.query(query_str, [firebase_id, name, email, address, phone, latitude, longitude]);
+                console.log(result);
+                resolve(result);
+
+            } catch (e) {
+                reject({
+                    "status_code": 502,
+                    "message": e.toString()
+                })
+
+            }
+
+        })
+    }
+
     async getBuyingHistory(buyer_id) {
-        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public."order" where buyer_id=($1) AND state='COMPLETED'";
+        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND state='COMPLETED'";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [buyer_id]);
@@ -62,7 +81,7 @@ class Buyer {
     }
 
     async getOngoingOrders(buyer_id) {
-        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public."order" where buyer_id=($1) AND state!='COMPLETED'";
+        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND state!='COMPLETED'";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [buyer_id]);

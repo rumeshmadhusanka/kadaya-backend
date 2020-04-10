@@ -55,25 +55,7 @@ class Category {
         })
     }
 
-    async getNearToLocation() {
-        let query_str = "SELECT id,name FROM public.category";
-        return new Promise(async (resolve, reject) => {
-            try {
-                let {rows} = await pg_pool.query(query_str);
-                console.log(rows)
-                resolve(rows);
 
-            } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
-
-            }
-
-        })
-
-    }
 
 
 
