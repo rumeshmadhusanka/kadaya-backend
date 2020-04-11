@@ -6,8 +6,9 @@ let shop_obj = new Shop();
 router.get('/', async (req, res) => {
     let lat = req.query.latitude;
     let long = req.query.longitude;
+    let radius = req.query.radius || process.env.DEFAULT_LOCATION_SEARCH_RADIUS;
     if (lat && long) {
-        await res.json(await shop_obj.getShopsNearLocation(lat, long, process.env.DEFAULT_LOCATION_SEARCH_RADIUS));
+        await res.json(await shop_obj.getShopsNearLocation(lat, long, radius));
     } else {
         await res.json(await shop_obj.getAllShops());
     }

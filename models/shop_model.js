@@ -79,7 +79,7 @@ class Shop {
 
     //todo handle photo adding when sign in
     async addNewShop(firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category_id){
-        let query_str = "INSERT INTO public.shop(firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category_id) values (($1),($2),($3),($4),($5),($6),($7),($8),($9),($10),($11),($12))"
+        let query_str = "INSERT INTO public.shop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category_id) values (($1),($2),($3),($4),($5),($6),($7),($8),($9),($10),($11),($12))"
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str,[firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category_id]);

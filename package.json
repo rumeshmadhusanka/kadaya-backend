@@ -18,13 +18,20 @@
   },
   "homepage": "",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/pg": "^7.14.3",
+    "aws-sdk": "^2.656.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "connect-busboy": "0.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-urllib": "^2.2.3",
+    "fs-extra": "^9.0.0",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.0.0"
+    "pg": "^8.0.0",
+    "streamifier": "^0.1.1",
+    "uuid": "latest"
   },
   "devDependencies": {}
 }
