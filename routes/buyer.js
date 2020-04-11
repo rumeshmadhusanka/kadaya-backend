@@ -121,6 +121,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
     let buyer_id = uniqueId();
+    let name = req.body.name;
     let email = req.body.email;
     let address = req.body.address;
     let phone = req.body.phone;

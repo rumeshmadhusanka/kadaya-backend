@@ -156,6 +156,7 @@ class Buyer {
                     let result = await bcrypt.compare(password, hashedPassword);
                     if (result === true) {
                         delete rows.password;
+                        console.log(rows);
                         resolve(rows);
                     } else {
                         reject({
@@ -177,13 +178,15 @@ class Buyer {
         let query_str = "INSERT INTO public.buyer(buyer_id, name, email, address, phone, latitude, longitude, password) values (($1),($2),($3),($4),($5),($6),($7),($8))";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str, [phone.toString()]);
+                let result = await pg_pool.query(query_str, [buyer_id, name, email, address, phone, latitude, longitude, password]);
+                console.log(result);
                 resolve(result);
 
             } catch (e) {
+                console.log(e);
                 reject({
                     "status_code": 502,
-                    "message": e.toString()
+                    "message": e.toString().detail
                 })
             }
         })
