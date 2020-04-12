@@ -7,7 +7,7 @@ class Buyer {
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str);
-                console.log(rows)
+                console.log(rows);
                 resolve(rows);
 
             } catch (e) {
