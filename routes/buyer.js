@@ -19,29 +19,7 @@ router.get('/', async (req, res) => {
 
 });
 
-router.post('/', async (req, res) => {
-    let buyer_id = req.body.buyer_id;
-    let name = req.body.name;
-    let email = req.body.email;
-    let address = req.body.address;
-    let phone = req.body.phone;
-    let latitude = req.body.latitude;
-    let longitude = req.body.longitude;
 
-    let status_code = 201;
-    let result;
-    try {
-        result = await buyer_obj.addNewBuyer(buyer_id, name, email, address, phone, latitude, longitude)
-        if (result.rowCount === 1) {
-            result = {"status": "success"}
-        }
-    } catch (e) {
-        status_code = 300;
-        console.log(e);
-        result = {"code": e.toString()};
-    }
-    await res.status(status_code).json(result)
-});
 
 router.put('/', async (req, res) => {
     let buyer_id = req.body.buyer_id;
@@ -49,13 +27,11 @@ router.put('/', async (req, res) => {
     let email = req.body.email;
     let address = req.body.address;
     let phone = req.body.phone;
-    let latitude = req.body.latitude;
-    let longitude = req.body.longitude;
 
     let status_code = 201;
     let result;
     try {
-        result = await buyer_obj.updateProfile(buyer_id, name, email, address, phone, latitude, longitude);
+        result = await buyer_obj.updateProfile(buyer_id, name, email, address, phone);
         if (result.rowCount === 1) {
             result = {"status": "success"}
         }
@@ -115,11 +91,12 @@ router.post('/login', async (req, res) => {
     let password = req.body.password;
     let result = await buyer_obj.login(phone, password);
     let buyer_id = result.buyer_id;
-    let token = jwt.sign({"buyer_id": buyer_id, "user_type": "BUYER"}, config.secret);
+    let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
     res.header('x-access-token', token).status(200).json(result);
 });
 
-router.post('/signup', async (req, res) => {
+//signup
+router.post('/', async (req, res) => {
     let buyer_id = uniqueId();
     let name = req.body.name;
     let email = req.body.email;
@@ -140,7 +117,7 @@ router.post('/signup', async (req, res) => {
             reply = {"status": "failed"};
             code = 400;
         }
-        let token = jwt.sign({"buyer_id": buyer_id, "user_type": ""}, config.secret);
+        let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
         res.header('x-access-token', token).status(code).json(reply);
     }catch (e) {
         res.status(404).send(e.toString());

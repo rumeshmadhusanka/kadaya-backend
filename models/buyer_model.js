@@ -11,10 +11,7 @@ class Buyer {
                 resolve(rows);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
@@ -31,10 +28,7 @@ class Buyer {
                 resolve(rows);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
@@ -51,10 +45,7 @@ class Buyer {
                 resolve(result);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
@@ -70,10 +61,7 @@ class Buyer {
                 resolve(rows);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
@@ -90,10 +78,7 @@ class Buyer {
                 resolve(rows);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
@@ -101,39 +86,33 @@ class Buyer {
 
     }
 
-    async updateProfile(firebase_id, name, email, address, phone, latitude, longitude) {
+    async updateProfile(buyer_id, name, email, address, phone) {
 
-        let query_str = "UPDATE public.buyer set name=COALESCE(($2),name), email=COALESCE(($3),email), address=COALESCE(($4),address), phone=COALESCE(($5),phone), latitude=COALESCE(($6),latitude), longitude=COALESCE(($7),longitude) where buyer_id = ($1)";
+        let query_str = "UPDATE public.buyer set name=COALESCE(($2),name), email=COALESCE(($3),email), address=COALESCE(($4),address), phone=COALESCE(($5),phone) where buyer_id = ($1)";
         return new Promise(async (resolve, reject) => {
             try {
-                let {rows} = await pg_pool.query(query_str, [firebase_id, name, email, address, phone, latitude, longitude]);
+                let {rows} = await pg_pool.query(query_str, [buyer_id, name, email, address, phone]);
                 console.log(rows);
                 resolve(rows);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
         })
     }
 
-    async updateLocation(firebase_id, lat, long) {
+    async updateLocation(buyer_id, lat, long) {
         let query_str = "UPDATE public.buyer set latitude=COALESCE(($2),latitude), longitude=COALESCE(($3),longitude) where buyer_id = ($1)";
         return new Promise(async (resolve, reject) => {
             try {
-                let {rows} = await pg_pool.query(query_str, [firebase_id, lat, long]);
+                let {rows} = await pg_pool.query(query_str, [buyer_id, lat, long]);
                 console.log(rows);
                 resolve(rows);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
@@ -160,16 +139,13 @@ class Buyer {
                         resolve(rows);
                     } else {
                         reject({
-                            "status_code": 404,
+                            "name": 404,
                             "message": "Invalid password"
                         })
                     }
                 }
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
             }
         })
     }
@@ -184,10 +160,7 @@ class Buyer {
 
             } catch (e) {
                 console.log(e);
-                reject({
-                    "status_code": 502,
-                    "message": e.toString().detail
-                })
+                reject(e)
             }
         })
     }

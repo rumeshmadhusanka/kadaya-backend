@@ -10,10 +10,7 @@ class Category {
                 resolve(rows);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
@@ -29,7 +26,7 @@ class Category {
             console.log(categories[i]["name"])
         }
         console.log(category_ids);
-        let query_str = "SELECT * from public.shop inner join category on shop.category_id = category.id where category_id = ($1)";
+        let query_str = "SELECT * from public.shop inner join category on shop.category = category.id where category = ($1)";
 
         return new Promise(async (resolve, reject) => {
             try {
@@ -45,10 +42,7 @@ class Category {
                 resolve(results);
 
             } catch (e) {
-                reject({
-                    "status_code": 502,
-                    "message": e.toString()
-                })
+                reject(e)
 
             }
 
