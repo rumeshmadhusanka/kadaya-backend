@@ -57,11 +57,11 @@ class Item {
         })
     }
 
-    async removeItem() {
-        let query_str = "DELETE ";
+    async removeItem(id) {
+        let query_str = "DELETE FROM public.item where id=($1)";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str, [id, name, description, amount_available, shop_id, price, photo_id, unit]);
+                let result = await pg_pool.query(query_str, [id]);
                 //console.log(rows);
                 resolve(result);
             } catch (e) {
@@ -71,11 +71,11 @@ class Item {
     }
 
     //id,shop_id, photo_id cannot be changed from here
-    async updateItem(name, description, amount_available, price, unit) {
-        let query_str = "UPDATE public.item set name=COALESCE(($1),name),description=COALESCE(($2),description), amount_available=COALESCE(($3),amount_available), price=COALESCE(($4),price),unit=COALESCE(($5),unit)";
+    async updateItem(name, description, amount_available, price, unit,id) {
+        let query_str = "UPDATE public.item set name=COALESCE(($1),name),description=COALESCE(($2),description), amount_available=COALESCE(($3),amount_available), price=COALESCE(($4),price),unit=COALESCE(($5),unit) where id=($6)";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str, [name, description, amount_available, price, unit]);
+                let result = await pg_pool.query(query_str, [name, description, amount_available, price, unit,id]);
                 //console.log(rows);
                 resolve(result);
             } catch (e) {
