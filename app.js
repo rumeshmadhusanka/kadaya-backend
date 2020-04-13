@@ -20,7 +20,7 @@ app.use(cors());
 
 //support parsing of url params
 //express_urls(app);
-
+app.use(bodyParser.urlencoded({ extended: true }));
 // support parsing of application/json type post data
 app.use(bodyParser.json());
 

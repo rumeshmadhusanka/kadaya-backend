@@ -166,7 +166,7 @@ router.post('/', async (req, res) => {
         let token = jwt.sign({"shop_id": shop_id}, config.secret);
         res.header('x-access-token', token).status(code).json(reply);
     } catch (e) {
-        res.status(404).json(e.toString());
+        res.status(404).json({"msg": e.name+" "+e.message})
     }
 });
 
