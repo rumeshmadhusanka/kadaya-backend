@@ -112,7 +112,7 @@ paths:
       parameters:
         - in: path
           name: category
-          type: number
+          type: string
           required: true
         - in: query
           name: latitude
