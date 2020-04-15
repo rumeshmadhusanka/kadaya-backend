@@ -209,7 +209,7 @@ paths:
           description: Server Error
 
   /shop/login/:
-    put:
+    post:
       summary: Login
       tags:
         - Shop
