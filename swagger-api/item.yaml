@@ -1,0 +1,198 @@
+swagger: "2.0"
+info:
+  title: Kadaya Backend API Documentation
+  version: 1.0.0
+host: localhost:3000
+schemes:
+  - http
+tags:
+  - name: Shop
+    description: Shop
+  - name: Buyer
+    description: Buyer
+  - name: Category
+    description: Category
+  - name: Image
+    description: Image
+  - name: Item
+    description: Item
+  - name: Monitoring
+    description: Monitoring
+  - name: Order
+    description: Order
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: x-access-token
+paths:
+  /item/:
+    get:
+      summary: Get all items
+      tags:
+        - Item
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+    post:
+      summary: Add new Item
+      tags:
+        - Item
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - shop_id
+              - name
+              - price
+            properties:
+              shop_id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              amount_available:
+                type: string
+              price:
+                type: number
+              photo_id:
+                type: string
+              unit:
+                type: string
+      responses:
+        201:
+          description: Created
+        400:
+          description: Not Found
+        502:
+          description: Server Error
+  /item/{id}:
+    put:
+      summary: Update Item
+      tags:
+        - Item
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - shop_id
+              - name
+              - price
+            properties:
+              shop_id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              amount_available:
+                type: string
+              price:
+                type: number
+              photo_id:
+                type: string
+              unit:
+                type: string
+      responses:
+        201:
+          description: Created
+        400:
+          description: Not Found
+        502:
+          description: Server Error
+    delete:
+      summary: Delete Item
+      tags:
+        - Item
+      consumes:
+        - application/json
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+  /item/shop/{shop_id}:
+    get:
+      summary: Get all items
+      tags:
+        - Item
+      consumes:
+        - application/json
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+  /item/search/:
+    get:
+      summary: Search items
+      tags:
+        - Item
+      consumes:
+        - application/json
+      parameters:
+        - name: keyword
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+  /item/{id}/amount/{value}:
+    put:
+      summary: Update Item's available amount
+      tags:
+        - Item
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+        - in: path
+          name: value
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Created
+        400:
+          description: Not Found
+        502:
+          description: Server Error
+
+

@@ -27,14 +27,6 @@ router.get('/', async (req, res) => {
 
 });
 
-router.get('/all', async (req, res) => {
-    try {
-        await res.json(await shop_obj.getAllShops());
-    }catch (e) {
-        await res.status(502).json({"msg": e.name+" "+e.message})
-    }
-});
-
 
 router.get('/:category', async (req, res) => {
     let lat = req.query.latitude;
@@ -74,8 +66,8 @@ router.put('/', async (req, res) => {
     }
 });
 
-router.put('/location', async (req, res) => {
-    let shop_id = req.body.shop_id;
+router.put('/:shop_id/location', async (req, res) => {
+    let shop_id = req.params.shop_id;
     let latitude = req.body.latitude;
     let longitude = req.body.longitude;
     try {
@@ -89,8 +81,8 @@ router.put('/location', async (req, res) => {
 
 });
 
-router.put('/password', async (req, res) => {
-    let shop_id = req.body.shop_id;
+router.put('/:shop_id/password', async (req, res) => {
+    let shop_id = req.params.shop_id;
     let old_password = req.body.old_password;
     let new_password = req.body.new_password;
 

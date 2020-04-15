@@ -13,8 +13,19 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:shop_id', async (req, res) => {
-    let shop_id = req.params['shop_id'];
+router.get('/search/', async (req, res) => {
+    let keyword = req.query.keyword;
+    console.log(keyword)
+    try {
+        await res.json(await item_obj.findItemByName(keyword));
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
+    }
+});
+
+router.get('/shop/:shop_id', async (req, res) => {
+    let shop_id = req.params.shop_id;
+    console.log(shop_id)
     try {
         await res.json(await item_obj.getAllItemsInAShop(shop_id));
     } catch (e) {
@@ -22,14 +33,7 @@ router.get('/:shop_id', async (req, res) => {
     }
 });
 
-router.get('/search', async (req, res) => {
-    let keyword = req.query.keyword;
-    try {
-        await res.json(await item_obj.findItemByName(keyword));
-    } catch (e) {
-        await res.status(502).json({"msg": e.name + " " + e.message})
-    }
-});
+
 
 router.post('/', async (req, res) => {
     let shop_id = req.body.shop_id;
@@ -44,7 +48,7 @@ router.post('/', async (req, res) => {
     try {
         let result = await item_obj.createNewItem(id, name, description, amount_available, shop_id, price, photo_id, unit);
         if (result.rowCount === 1) {
-            await res.json({"msg": "success"});
+            await res.status(201).json({"msg": "success"});
         } else {
             await res.status(502).json({"msg": "failed"});
         }
@@ -69,8 +73,8 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-router.put('/', async (req, res) => {
-    let id = req.body.id;
+router.put('/:id', async (req, res) => {
+    let id = req.params.id;
     let name = req.body.name;
     let description = req.body.description;
     let amount_available = req.body.amount_available;

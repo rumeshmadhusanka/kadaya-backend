@@ -8,12 +8,9 @@ class Category {
                 let {rows} = await pg_pool.query(query_str);
                 console.log(rows)
                 resolve(rows);
-
             } catch (e) {
                 reject(e)
-
             }
-
         })
 
     }
@@ -26,7 +23,7 @@ class Category {
             console.log(categories[i]["name"])
         }
         console.log(category_ids);
-        let query_str = "SELECT * from public.shop inner join category on shop.category = category.name where category = ($1)";
+        let query_str = "SELECT shop_id,shop.name,address,latitude,longitude,comments,phone,email,photo_id from public.shop inner join category on shop.category = category.name where category = ($1)";
 
         return new Promise(async (resolve, reject) => {
             try {

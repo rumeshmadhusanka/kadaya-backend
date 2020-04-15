@@ -35,7 +35,7 @@ class Item {
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [keyword]);
-                //console.log(rows);
+                console.log(rows);
                 resolve(rows);
             } catch (e) {
                 reject(e)

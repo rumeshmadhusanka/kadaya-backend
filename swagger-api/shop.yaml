@@ -1,0 +1,246 @@
+swagger: "2.0"
+info:
+  title: Kadaya Backend API Documentation
+  version: 1.0.0
+host: localhost:3000
+schemes:
+  - http
+tags:
+  - name: Shop
+    description: Shop
+  - name: Buyer
+    description: Buyer
+  - name: Category
+    description: Category
+  - name: Image
+    description: Image
+  - name: Item
+    description: Item
+  - name: Monitoring
+    description: Monitoring
+  - name: Order
+    description: Order
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: x-access-token
+paths:
+  /shop/:
+    get:
+      summary: Get all
+      parameters:
+        - in: query
+          name: latitude
+          type: number
+          required: false
+        - in: query
+          name: longitude
+          type: number
+          required: false
+        - in: query
+          name: radius
+          type: number
+          required: false
+      tags:
+        - Shop
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+    post:
+      summary: Sign up
+      tags:
+        - Shop
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - address
+              - phone
+              - password
+              - latitude
+              - longitude
+              - category
+            properties:
+              name:
+                type: string
+              address:
+                type: string
+              latitude:
+                type: string
+              longitude:
+                type: string
+              comments:
+                type: string
+              photo_id:
+                type: string
+              owner_name:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+              phone:
+                type: string
+              category:
+                type: string
+      responses:
+        201:
+          description: Updated
+        400:
+          description: Bad Request
+        502:
+          description: Server Error
+
+
+  /shop/{category}/:
+    get:
+      summary: Get by category
+      parameters:
+        - in: path
+          name: category
+          type: number
+          required: true
+        - in: query
+          name: latitude
+          type: number
+          required: false
+        - in: query
+          name: longitude
+          type: number
+          required: false
+        - in: query
+          name: radius
+          type: number
+          required: false
+      tags:
+        - Shop
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+
+  /shop/{shop_id}/location/:
+    post:
+      summary: Update shop location
+      tags:
+        - Shop
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          required: true
+          type: string
+          name: shop_id
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - latitude
+              - longitude
+            properties:
+              latitude:
+                type: number
+              longitude:
+                type: number
+      responses:
+        200:
+          description: Updated
+        400:
+          description: Bad Request
+        502:
+          description: Server Error
+
+  /shop/{shop_id}/password/:
+    put:
+      summary: Change shop password
+      tags:
+        - Shop
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          required: true
+          name: shop_id
+          type: string
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - old_password
+              - new_password
+            properties:
+              old_password:
+                type: string
+              new_password:
+                type: string
+      responses:
+        200:
+          description: Updated
+        404:
+          description: Not found
+        400:
+          description: Bad Request
+        502:
+          description: Server Error
+
+  /shop/login/:
+    put:
+      summary: Login
+      tags:
+        - Shop
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - password
+              - phone
+            properties:
+              phone:
+                type: string
+                example: +94785678348
+              password:
+                type: string
+                example: abc
+      responses:
+        200:
+          description: Updated
+        404:
+          description: Not found
+        400:
+          description: Bad Request
+        502:
+          description: Server Error
+
+

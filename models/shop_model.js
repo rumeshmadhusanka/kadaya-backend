@@ -134,10 +134,7 @@ class Shop {
             try {
                 let {rows} = await pg_pool.query(query_str, [phone.toString()]);
                 if (rows == null) {
-                    reject({
-                        "status_code": 404,
-                        "message": "Invalid password or phone number"
-                    })
+                    reject(new Error("Invalid password or phone"));
                 } else {
                     rows = rows[0];
                     let hashedPassword = rows.password;
@@ -147,10 +144,7 @@ class Shop {
                         console.log(rows);
                         resolve(rows);
                     } else {
-                        reject({
-                            "status_code": 404,
-                            "message": "Invalid password"
-                        })
+                        reject(new Error("Invalid password"))
                     }
                 }
             } catch (e) {
