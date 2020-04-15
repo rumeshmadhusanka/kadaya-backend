@@ -1,0 +1,265 @@
+swagger: "2.0"
+info:
+  title: Kadaya Backend API Documentation
+  version: 1.0.0
+host: localhost:3000
+schemes:
+  - http
+tags:
+  - name: Shop
+    description: Shop
+  - name: Buyer
+    description: Buyer
+  - name: Category
+    description: Category
+  - name: Image
+    description: Image
+  - name: Item
+    description: Item
+  - name: Monitoring
+    description: Monitoring
+  - name: Order
+    description: Order
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: x-access-token
+paths:
+  /buyer/:
+    get:
+      summary: Get all
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+    post:
+      summary: Sign up
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - address
+              - phone
+              - password
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              address:
+                type: string
+              phone:
+                type: string
+              password:
+                type: string
+              latitude:
+                type: string
+              longitude:
+                type: string
+      responses:
+        201:
+          description: Updated
+        400:
+          description: Not Found
+        502:
+          description: Server Error
+
+
+
+  /buyer/{buyer_id}:
+    get:
+      summary: Get by id
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      parameters:
+        - name: buyer_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not Found
+        502:
+          description: Server Error
+
+
+    put:
+      summary: Update exsiting buyer
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - address
+              - phone
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              address:
+                type: string
+              phone:
+                type: string
+      responses:
+        200:
+          description: Updated
+        400:
+          description: Not Found
+        502:
+          description: Server Error
+
+  /buyer/{buyer_id}/location:
+    put:
+      summary: Update location of a buyer
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: buyer_id
+          required: true
+          type: string
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - latitude
+              - longitude
+            properties:
+              latitude:
+                type: number
+              longitude:
+                type: number
+      responses:
+        200:
+          description: Updated
+        400:
+          description: Not Found
+        502:
+          description: Server Error
+
+
+  /buyer/{buyer_id}/history:
+    put:
+      summary: Get order history of a buyer
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: buyer_id
+          required: true
+          type: string
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - latitude
+              - longitude
+            properties:
+              latitude:
+                type: number
+              longitude:
+                type: number
+      responses:
+        200:
+          description: Updated
+        400:
+          description: Not Found
+        502:
+          description: Server Error
+
+
+  /buyer/{buyer_id}/current-orders:
+    get:
+      summary: Get by current orders by id
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      parameters:
+        - name: buyer_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not Found
+        502:
+          description: Server Error
+
+  /buyer/login:
+    post:
+      summary: Login
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: users details
+          schema:
+            type: object
+            required:
+              - password
+              - phone
+            properties:
+              password:
+                type: string
+                example: abc
+              phone:
+                type: string
+                example: 0786745678
+      responses:
+        200:
+          description: Updated
+        502:
+          description: Server Error
+

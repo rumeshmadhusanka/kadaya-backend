@@ -5,19 +5,22 @@ const routes = require('./routes');
 const bodyParser = require('body-parser');
 const express_urls = require('express-urllib');
 const cors = require('cors');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            host: process.env.SWAGGER_HOST,
+            basePath: process.env.SWAGGER_BASE_PATH
+        }
+    },
+    apis: ['./swagger-api/**.yaml']
+};
 
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-//cors headers
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', '*');
-//     res.setHeader("Access-Control-Allow-Credentials", true);
-//     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization,x-access-token");
-//     res.setHeader('Access-Control-Expose-Headers', '*');
-//     //Access-Control-Expose-Headers: *
-//     next();
-// });
 app.use(cors());
 
 //support parsing of url params

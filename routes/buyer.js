@@ -10,89 +10,110 @@ const config = {
 };
 
 router.get('/', async (req, res) => {
-    let buyer_id = req.query.buyer_id;
-    if (buyer_id) {
-        await res.json(await buyer_obj.getByFirebaseId(buyer_id));
-    } else {
+    try {
         await res.json(await buyer_obj.getAll());
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
+    }
+
+});
+
+router.get('/:buyer_id', async (req, res) => {
+    let buyer_id = req.params['buyer_id'];
+    try {
+        if (buyer_id) {
+            await res.json(await buyer_obj.getByFirebaseId(buyer_id));
+        } else {
+            await res.status(404).json({"msg": "Id not found"})
+        }
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
     }
 
 });
 
 
-
-router.put('/', async (req, res) => {
-    let buyer_id = req.body.buyer_id;
+router.put('/:buyer_id', async (req, res) => {
+    let buyer_id = req.params['buyer_id'];
     let name = req.body.name;
     let email = req.body.email;
     let address = req.body.address;
     let phone = req.body.phone;
 
-    let status_code = 201;
     let result;
     try {
         result = await buyer_obj.updateProfile(buyer_id, name, email, address, phone);
         if (result.rowCount === 1) {
-            result = {"status": "success"}
+            await res.status(200).json({"msg": "success"})
+        } else {
+            await res.status(400).json({"msg": "failed. Could not update"})
         }
     } catch (e) {
-        status_code = 300;
-        console.log(e);
-        result = {"code": e.toString()};
+        await res.status(502).json({"msg": e.name + " " + e.message})
     }
-    await res.status(status_code).json(result)
+
 
 });
 
-router.put('/location', async (req, res) => {
-    let buyer_id = req.body.buyer_id;
+router.put('/:buyer_id/location', async (req, res) => {
+    let buyer_id = req.params['buyer_id'];
     let latitude = req.body.latitude;
     let longitude = req.body.longitude;
 
-    let status_code = 201;
     let result;
     try {
         result = await buyer_obj.updateLocation(buyer_id, latitude, longitude);
         if (result.rowCount === 1) {
-            result = {"status": "success"}
+            await res.status(201).json({"msg": "success"})
+        } else {
+            await res.status(400).json({"msg": "failed. Could not update"})
         }
     } catch (e) {
-        status_code = 300;
-        console.log(e);
-        result = {"code": e.toString()};
-    }
-    await res.status(status_code).json(result)
-
-});
-
-
-router.get('/history', async (req, res) => {
-    let buyer_id = req.query.buyer_id;
-    if (buyer_id) {
-        await res.json(await buyer_obj.getBuyingHistory(buyer_id));
-    } else {
-        await res.status(404).end();
+        await res.status(502).json({"msg": e.name + " " + e.message})
     }
 
 });
 
-router.get('/current-orders', async (req, res) => {
-    let buyer_id = req.query.buyer_id;
-    if (buyer_id) {
-        await res.json(await buyer_obj.getOngoingOrders(buyer_id));
-    } else {
-        await res.status(404).end();
+
+router.get('/:buyer_id/history', async (req, res) => {
+    let buyer_id = req.params.buyer_id;
+    try {
+        if (buyer_id) {
+            await res.json(await buyer_obj.getBuyingHistory(buyer_id));
+        } else {
+            await res.status(404).json({"msg": "buyer not found"});
+        }
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
     }
 
+});
+
+router.get('/:buyer_id/current-orders', async (req, res) => {
+    let buyer_id = req.params.buyer_id;
+    try {
+        if (buyer_id) {
+            await res.json(await buyer_obj.getOngoingOrders(buyer_id));
+        } else {
+            await res.status(404).json({"msg": "buyer not found"});
+        }
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
+    }
 });
 
 router.post('/login', async (req, res) => {
     let phone = req.body.phone;
     let password = req.body.password;
-    let result = await buyer_obj.login(phone, password);
-    let buyer_id = result.buyer_id;
-    let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
-    res.header('x-access-token', token).status(200).json(result);
+
+    try {
+        let result = await buyer_obj.login(phone, password);
+        let buyer_id = result.buyer_id;
+        let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
+        res.header('x-access-token', token).status(200).json(result);
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
+    }
 });
 
 //signup
@@ -111,16 +132,16 @@ router.post('/', async (req, res) => {
     try {
         let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password);
         if (result.rowCount === 1) {
-            reply = {"status": "success"};
-            code = 200;
-        }else {
+            reply = {"status": "success","buyer_id":buyer_id};
+            code = 201;
+        } else {
             reply = {"status": "failed"};
             code = 400;
         }
         let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
         res.header('x-access-token', token).status(code).json(reply);
-    }catch (e) {
-        res.status(404).send(e.toString());
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
     }
 
 });

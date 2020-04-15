@@ -2,7 +2,7 @@ const pg_pool = require('../middleware/db');
 
 class Category {
     async getAll() {
-        let query_str = "SELECT id,name FROM public.category";
+        let query_str = "SELECT name FROM public.category";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str);
@@ -22,11 +22,11 @@ class Category {
         let categories = await this.getAll();
         let category_ids = [];
         for (let i = 0; i < categories.length; i++) {
-            category_ids.push(categories[i].id)
+            category_ids.push(categories[i].name)
             console.log(categories[i]["name"])
         }
         console.log(category_ids);
-        let query_str = "SELECT * from public.shop inner join category on shop.category = category.id where category = ($1)";
+        let query_str = "SELECT * from public.shop inner join category on shop.category = category.name where category = ($1)";
 
         return new Promise(async (resolve, reject) => {
             try {
