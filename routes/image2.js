@@ -32,7 +32,7 @@ router.post('/', parser.single("image"), async (req, res) => {
             "url": image.url
         });
     }catch (e) {
-        await res.json({"msg": e.name + " " + e.message})
+        await res.status(502).json({"msg": e.name + " " + e.message})
     }
 
 });

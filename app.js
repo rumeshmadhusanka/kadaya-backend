@@ -3,8 +3,10 @@ const express = require('express');
 const app = express();
 const routes = require('./routes');
 const bodyParser = require('body-parser');
-//const express_urls = require('express-urllib');
+const express_urls = require('express-urllib');
 const cors = require('cors');
+
+
 
 //cors headers
 // app.use((req, res, next) => {
@@ -19,7 +21,7 @@ const cors = require('cors');
 app.use(cors());
 
 //support parsing of url params
-//express_urls(app);
+express_urls(app);
 app.use(bodyParser.urlencoded({ extended: true }));
 // support parsing of application/json type post data
 app.use(bodyParser.json());

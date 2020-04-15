@@ -2,7 +2,12 @@ const AWS = require('aws-sdk');
 const router = require("express").Router();
 const fs = require('fs-extra');
 const uniqueId = require('uuid/v4');
+const sharp = require('sharp');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const Image = require('../models/file_model');
 
+let image_obj = new Image();
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -15,42 +20,58 @@ function encode(data) {
     return buf.toString('base64')
 }
 
-router.get('/', (req, res) => {
-    let image_key = "shop/ER-2.jpeg";
-    let read_stream = s3.getObject({
-            Bucket: process.env.AWS_S3_BUCKET,
-            Key: image_key,
-        }
-    ).createReadStream();
-    read_stream.on('close', () => {
-        res.end()
-    });
-    read_stream.on('error', () => {
-        res.status(502).end();
-    });
+router.get('/:key', async(req, res) => {
+    let key = req.params['key'];
+    try {
+        let read_stream = s3.getObject({
+                Bucket: process.env.AWS_S3_BUCKET,
+                Key: key,
+            }
+        ).createReadStream();
+        read_stream.on('close', () => {
+            res.end()
+        });
+        read_stream.on('error', () => {
+            res.status(502).end();
+        });
 
-    read_stream.pipe(res);
+        read_stream.pipe(res);
+    }catch (e) {
+        await res.status(502).json({"msg": e.name+" "+e.message})
+    }
 
 });
 
-router.post('/', (req, res) => {
-    //let fstream;
+let upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: process.env.AWS_S3_BUCKET,
+        acl: 'public-read',
+        metadata: function (req, file, cb) {
+            console.log(file);
+            cb(null, {fieldName: file.fieldname});
+        },
+        key: function (req, file, cb) {
+            let file_name = file.originalname;
+            file_name = file_name.split('.');
+            let extension = file_name[file_name.length-1];
+            cb(null,  "shop/"+uniqueId()+"."+extension)
+        }
+    })
+});
 
-    console.log("hvytfyt");
+router.post('/:shop_id', upload.array('image', 5), async (req, res, next)=> {
+    let shop_id = req.body.shop_id;
+    try{
+        console.log(req.files);
+        for (let i = 0; i < req.files.length; i++) {
+             await image_obj.saveUploadUrl(req.files[i].location,shop_id)
+        }
+        await res.json({"msg": req.files.length})
+    }catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
+    }
 
-    //fstream = fs.createReadStream(req.busboy);
-    console.log(req.files);
-    let image_name = uniqueId();
-    res.send("gygyg");
-
-
-    // s3.upload({
-    //     Bucket: process.env.AWS_S3_BUCKET,
-    //     Key: image_name,
-    //     Body: req.busboy
-    // }).on('httpUploadProgress',(err,data)=>{
-    //     res.json({"message":err || data.Location})
-    // })
 });
 
 module.exports = router;
