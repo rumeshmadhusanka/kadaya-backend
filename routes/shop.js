@@ -56,8 +56,9 @@ router.put('/', async (req, res) => {
     let category = req.body.category;
     let open_hours = req.body.open_hours;
     let is_open = req.body.is_open;
+    let contact_numbers = req.body.contact_numbers;
     try {
-        let out = await shop_obj.updateProfile(shop_id, name, address, comments, owner_name, email, phone, category, open_hours, is_open);
+        let out = await shop_obj.updateProfile(shop_id, name, address, comments, owner_name, email, phone, category, open_hours, is_open,contact_numbers);
         out = out.rowCount;
         console.log(out);
         await res.json({"msg": out})
@@ -143,11 +144,14 @@ router.post('/', async (req, res) => {
     let password = req.body.password;
     let phone = req.body.phone;
     let category = req.body.category;
+    let open_hours=req.body.open_hours ;
+    let is_open=req.body.is_open;
+    let contact_numbers=req.body.contact_numbers;
 
     let reply;
     let code;
     try {
-        let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category);
+        let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers);
         if (result.rowCount === 1) {
             reply = {"status": "success"};
             code = 200;

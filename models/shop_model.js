@@ -3,7 +3,7 @@ const pg_pool = require('../middleware/db');
 class Shop {
     async getAllShops(){
         //todo remove password from result set
-        let query_str = "SELECT * FROM public.shop";
+        let query_str = "SELECT shop_id, name, address, latitude, longitude, comments, photo_id, email, category, open_hours, is_open, contact_numbers FROM public.shop";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str);
@@ -18,7 +18,7 @@ class Shop {
 
     async getAllShopsByCategory(category){
         //todo remove password from result set
-        let query_str = "SELECT * FROM public.shop where category=($1)";
+        let query_str = "SELECT shop_id, name, address, latitude, longitude, comments, photo_id, email, category, open_hours, is_open, contact_numbers FROM public.shop where category=($1)";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str,[category]);
@@ -34,7 +34,7 @@ class Shop {
     async getShopsNearLocation(lat, long, radius) {
         // 6.420076, 80.002647
         //todo remove password from result set
-        let query_str = "SELECT * FROM public.shop where cal_distance(($1),($2),public.shop.latitude,public.shop.longitude) < ($3)";
+        let query_str = "SELECT shop_id, name, address, latitude, longitude, comments, photo_id, email, category, open_hours, is_open, contact_numbers FROM public.shop where cal_distance(($1),($2),public.shop.latitude,public.shop.longitude) < ($3)";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str,[lat,long,radius]);
@@ -52,7 +52,7 @@ class Shop {
 
     async getShopsNearLocationByCategory(lat, long, radius, category){
         //todo remove password from result set
-        let query_str = "SELECT * FROM public.shop where cal_distance(($1),($2),public.shop.latitude,public.shop.longitude) < ($3) and category =($4)";
+        let query_str = "SELECT shop_id, name, address, latitude, longitude, comments, photo_id, email, category, open_hours, is_open, contact_numbers FROM public.shop where cal_distance(($1),($2),public.shop.latitude,public.shop.longitude) < ($3) and category =($4)";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str,[lat,long,radius,category]);
@@ -67,12 +67,12 @@ class Shop {
     }
 
     //this doesn't update password, location, or photo
-    async updateProfile(shop_id, name,address,comments,owner_name, email, phone, category,open_hours,is_open) {
+    async updateProfile(shop_id, name,address,comments,owner_name, email, phone, category,open_hours,is_open,contact_numbers) {
 
-        let query_str = "UPDATE public.shop set name=COALESCE(($1),name), address=COALESCE(($2),address),comments=COALESCE(($3),comments), owner_name=COALESCE(($4),owner_name), email=COALESCE(($5),email), phone=COALESCE(($6),phone), category=COALESCE(($7),category),open_hours=COALESCE(($8),open_hours),is_open=COALESCE(($9),is_open) where shop_id = ($10)";
+        let query_str = "UPDATE public.shop set name=COALESCE(($1),name), address=COALESCE(($2),address),comments=COALESCE(($3),comments), owner_name=COALESCE(($4),owner_name), email=COALESCE(($5),email), phone=COALESCE(($6),phone), category=COALESCE(($7),category),open_hours=COALESCE(($8),open_hours),is_open=COALESCE(($9),is_open),contact_numbers=COALESCE(($10),contact_numbers) where shop_id = ($11)";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str, [name,address,comments,owner_name, email, phone, category,open_hours,is_open,shop_id]);
+                let result = await pg_pool.query(query_str, [name,address,comments,owner_name, email, phone, category,open_hours,is_open,contact_numbers,shop_id]);
                 console.log(result);
                 resolve(result);
 
@@ -88,7 +88,7 @@ class Shop {
         let query_str = "UPDATE public.shop set latitude=COALESCE(($1),latitude), longitude=COALESCE(($2),longitude) where shop_id=($3)";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str, [latitude.longitude,shop_id]);
+                let result = await pg_pool.query(query_str, [latitude,longitude,shop_id]);
                 resolve(result);
             } catch (e) {
                 reject(e)
@@ -154,12 +154,12 @@ class Shop {
     }
 
 
-    //todo handle photo adding when sign in
-    async addNewShop(firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category){
-        let query_str = "INSERT INTO public.shop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category) values (($1),($2),($3),($4),($5),($6),($7),($8),($9),($10),($11),($12))";
+
+    async addNewShop(firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers){
+        let query_str = "INSERT INTO public.shop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers) values (($1),($2),($3),($4),($5),($6),($7),($8),($9),($10),($11),($12),($13),($14),($15))";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str,[firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category]);
+                let result = await pg_pool.query(query_str,[firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers]);
                 console.log(result);
                 resolve(result);
             } catch (e) {
