@@ -26,29 +26,9 @@ securityDefinitions:
     in: header
     name: x-access-token
 paths:
-  /image/{key}:
-    get:
-      summary: Get image by key
-      tags:
-        - Image
-      consumes:
-        - application/json
-      produces:
-        - image/jpg
-        - application/json
-      parameters:
-        - name: key
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: OK
-        502:
-          description: Server Error
   /image/shop/{shop_id}/keys:
     get:
-      summary: Get all the images' keys for a shop
+      summary: Get all the images' URLs for a shop
       tags:
         - Image
       consumes:

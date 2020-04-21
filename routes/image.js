@@ -15,32 +15,32 @@ AWS.config.update({
 });
 let s3 = new AWS.S3();
 
-function encode(data) {
-    let buf = Buffer.from(data);
-    return buf.toString('base64')
-}
+// function encode(data) {
+//     let buf = Buffer.from(data);
+//     return buf.toString('base64')
+// }
 
-router.get('/:key', async(req, res) => {
-    let key = req.params['key'];
-    try {
-        let read_stream = s3.getObject({
-                Bucket: process.env.AWS_S3_BUCKET,
-                Key: key,
-            }
-        ).createReadStream();
-        read_stream.on('close', () => {
-            res.end()
-        });
-        read_stream.on('error', () => {
-            res.status(502).end();
-        });
-
-        read_stream.pipe(res);
-    }catch (e) {
-        await res.status(502).json({"msg": e.name+" "+e.message})
-    }
-
-});
+// router.get('/:key', async(req, res) => {
+//     let key = req.params['key'];
+//     try {
+//         let read_stream = s3.getObject({
+//                 Bucket: process.env.AWS_S3_BUCKET,
+//                 Key: key,
+//             }
+//         ).createReadStream();
+//         read_stream.on('close', () => {
+//             res.end()
+//         });
+//         read_stream.on('error', () => {
+//             res.status(502).end();
+//         });
+//
+//         read_stream.pipe(res);
+//     }catch (e) {
+//         await res.status(502).json({"msg": e.name+" "+e.message})
+//     }
+//
+// });
 
 
 router.get('/shop/:shop_id/keys',async(req, res)=>{
@@ -72,7 +72,7 @@ let upload = multer({
 });
 
 router.post('/shop/:shop_id', upload.array('image', 5), async (req, res, next)=> {
-    let shop_id = req.body.shop_id;
+    let shop_id = req.params.shop_id;
     try{
         console.log(req.files);
         for (let i = 0; i < req.files.length; i++) {
