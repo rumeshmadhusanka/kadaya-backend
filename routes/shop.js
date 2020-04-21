@@ -148,10 +148,12 @@ router.post('/', async (req, res) => {
     let is_open=req.body.is_open;
     let contact_numbers=req.body.contact_numbers;
 
+    let password_hash = bcrypt.hashSync(password);
+
     let reply;
     let code;
     try {
-        let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers);
+        let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password_hash, phone, category,open_hours,is_open,contact_numbers);
         if (result.rowCount === 1) {
             reply = {"status": "success"};
             code = 200;

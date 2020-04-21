@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Buyer = require('../models/buyer_model');
 const jwt = require('jsonwebtoken');
 const uniqueId = require('uuid/v4');
+const bcrypt = require('bcryptjs');
 
 
 let buyer_obj = new Buyer();
@@ -127,10 +128,11 @@ router.post('/', async (req, res) => {
     let longitude = req.body.longitude;
     let password = req.body.password;
 
+    let password_hash = bcrypt.hashSync(password);
     let reply;
     let code;
     try {
-        let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password);
+        let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password_hash);
         if (result.rowCount === 1) {
             reply = {"status": "success","buyer_id":buyer_id};
             code = 201;
