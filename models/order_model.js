@@ -42,8 +42,8 @@ class Order {
 
 	async createNewOrder(id, buyer_id, shop_id, message_body, started, last_updated_timestamp, total_price, items_list) {
 		let query_str = 'INSERT INTO public.order (id,buyer_id, shop_id, message_body, started, last_updated_timestamp, total_price) values (($1),($2),($3),($4),($5),($6))';
-		let query2 = 'INSERT INTO public.order_item (order_id, item_id, amount, price) values (($1),($2),($3),(select price from kadaya.public.item where id=kadaya.public.order_item.item_id))';
-		let query3 = 'UPDATE  public.order set total_price = (select sum(price) from kadaya.public.order_item where order_id = ($1)) where id=($1)';
+		let query2 = 'INSERT INTO public.order_item (order_id, item_id, amount, price) values (($1),($2),($3),(select price from public.item where id=public.order_item.item_id))';
+		let query3 = 'UPDATE  public.order set total_price = (select sum(price) from public.order_item where order_id = ($1)) where id=($1)';
 		return new Promise(async (resolve, reject) => {
 			try {
 				let result = await pg_pool.query(query_str, [id, buyer_id, shop_id, message_body, started, last_updated_timestamp, total_price]);
