@@ -42,6 +42,17 @@ router.get('/:key', async(req, res) => {
 
 });
 
+
+router.get('/shop/:shop_id/keys',async(req, res)=>{
+    let shop_id = req.params['shop_id'];
+    try{
+        let result =  await image_obj.getAllImageKeysOfAShop(shop_id);
+        await res.json(result)
+    }catch (e) {
+        await res.status(502).json({"msg": e.name+" "+e.message})
+    }
+});
+
 let upload = multer({
     storage: multerS3({
         s3: s3,
@@ -60,7 +71,7 @@ let upload = multer({
     })
 });
 
-router.post('/:shop_id', upload.array('image', 5), async (req, res, next)=> {
+router.post('/shop/:shop_id', upload.array('image', 5), async (req, res, next)=> {
     let shop_id = req.body.shop_id;
     try{
         console.log(req.files);

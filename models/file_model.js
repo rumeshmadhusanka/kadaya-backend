@@ -17,5 +17,18 @@ class FileUpload{
 
         })
     }
+
+    async getAllImageKeysOfAShop(shop_id){
+        let query_str = "SELECT * FROM public.shop_photos where shop_id=($1)";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await pg_pool.query(query_str, [shop_id]);
+                console.log(result);
+                resolve(result);
+            } catch (e) {
+                reject(e)
+            }
+        })
+    }
 }
 module.exports = FileUpload;

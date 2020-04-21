@@ -46,4 +46,46 @@ paths:
           description: OK
         502:
           description: Server Error
+  /image/shop/{shop_id}/keys:
+    get:
+      summary: Get all the images' keys for a shop
+      tags:
+        - Image
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+  /image/shop/{shop_id}/:
+    post:
+      summary: upload image/images
+      tags:
+        - Image
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: shop_id
+          in: path
+          required: true
+          type: string
+        - name: image
+          type: file
+          required: true
+          in: formData
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
 
