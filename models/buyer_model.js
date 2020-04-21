@@ -36,22 +36,6 @@ class Buyer {
 
     }
 
-    async addNewBuyer(buyer_id, name, email, address, phone, latitude, longitude) {
-        let query_str = "INSERT INTO public.buyer(buyer_id, name, email, address, phone, latitude, longitude) values (($1),($2),($3),($4),($5),($6),($7)) on conflict(buyer_id) do update set name=($2), email=($3), address=($4), phone=($5), latitude=($6), longitude=($7)";
-        return new Promise(async (resolve, reject) => {
-            try {
-                let result = await pg_pool.query(query_str, [buyer_id, name, email, address, phone, latitude, longitude]);
-                console.log(result);
-                resolve(result);
-
-            } catch (e) {
-                reject(e)
-
-            }
-
-        })
-    }
-
     async getBuyingHistory(buyer_id) {
         let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND state='COMPLETED'";
         return new Promise(async (resolve, reject) => {
@@ -124,11 +108,8 @@ class Buyer {
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [phone.toString()]);
-                if (rows == null) {
-                    reject({
-                        "status_code": 404,
-                        "message": "Invalid password or phone number"
-                    })
+                if (rows.length===0) {
+                    reject(new Error("Invalid username"))
                 } else {
                     rows = rows[0];
                     let hashedPassword = rows.password;
@@ -138,10 +119,7 @@ class Buyer {
                         console.log(rows);
                         resolve(rows);
                     } else {
-                        reject({
-                            "name": 404,
-                            "message": "Invalid password"
-                        })
+                        reject(new Error("Invalid password"))
                     }
                 }
             } catch (e) {
