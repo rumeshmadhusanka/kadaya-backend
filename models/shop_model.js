@@ -1,4 +1,5 @@
 const pg_pool = require('../middleware/db');
+const bcrypt = require('bcryptjs');
 
 class Shop {
     async getAllShops(){
@@ -155,11 +156,11 @@ class Shop {
 
 
 
-    async addNewShop(firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers){
+    async addNewShop(id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers){
         let query_str = "INSERT INTO public.shop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers) values (($1),($2),($3),($4),($5),($6),($7),($8),($9),($10),($11),($12),($13),($14),($15))";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str,[firebase_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers]);
+                let result = await pg_pool.query(query_str,[id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers]);
                 console.log(result);
                 resolve(result);
             } catch (e) {
