@@ -87,6 +87,10 @@ router.put('/:shop_id/password', async (req, res) => {
     let old_password = req.body.old_password;
     let new_password = req.body.new_password;
 
+    if(!new_password){
+        await res.status(400).json({"msg": "password cannot be empty"})
+    }
+
     try {
         let pw_hash_from_db = await shop_obj.getPassword(shop_id);
         if (pw_hash_from_db[0]) {

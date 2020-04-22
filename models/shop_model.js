@@ -133,11 +133,12 @@ class Shop {
         let query_str = "SELECT * from shop where phone=($1)";
         return new Promise(async (resolve, reject) => {
             try {
-                let {rows} = await pg_pool.query(query_str, [phone.toString()]);
-                if (rows == null) {
+                let result1 = await pg_pool.query(query_str, [phone.toString()]);
+                console.log(result1.rows)
+                if (result1.rowCount===0) {
                     reject(new Error("Invalid password or phone"));
                 } else {
-                    rows = rows[0];
+                    let rows = result1.rows[0];
                     let hashedPassword = rows.password;
                     let result = await bcrypt.compare(password, hashedPassword);
                     if (result === true) {

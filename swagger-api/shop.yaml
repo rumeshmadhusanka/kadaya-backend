@@ -135,9 +135,9 @@ paths:
               address:
                 type: string
               latitude:
-                type: string
+                type: number
               longitude:
-                type: string
+                type: number
               comments:
                 type: string
               photo_id:
@@ -192,7 +192,7 @@ paths:
           description: Server Error
 
   /shop/{shop_id}/location/:
-    post:
+    put:
       summary: Update shop location
       tags:
         - Shop
