@@ -159,10 +159,10 @@ router.post('/', async (req, res) => {
     try {
         let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password_hash, phone, category,open_hours,is_open,contact_numbers);
         if (result.rowCount === 1) {
-            reply = {"status": "success"};
+            reply = {"msg": "success"};
             code = 200;
         } else {
-            reply = {"status": "failed"};
+            reply = {"msg": "failed"};
             code = 400;
         }
         let token = jwt.sign({"shop_id": shop_id}, config.secret);
