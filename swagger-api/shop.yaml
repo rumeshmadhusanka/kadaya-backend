@@ -62,10 +62,11 @@ paths:
       parameters:
         - in: body
           name: user
-          description: users details
+          description: json body
           schema:
             type: object
             required:
+              - shop_id
               - name
               - email
               - address
@@ -75,6 +76,9 @@ paths:
               - longitude
               - category
             properties:
+              shop_id:
+                type: string
+                example: 26c2a01a-ff93-4a30-ac1e-e1da49abc7d5
               name:
                 type: string
               address:
@@ -113,7 +117,7 @@ paths:
       parameters:
         - in: body
           name: user
-          description: users details
+          description: json body
           schema:
             type: object
             required:
@@ -203,7 +207,7 @@ paths:
           name: shop_id
         - in: body
           name: user
-          description: users details
+          description: json body
           schema:
             type: object
             required:
@@ -238,7 +242,7 @@ paths:
           type: string
         - in: body
           name: user
-          description: users details
+          description: json body
           schema:
             type: object
             required:
@@ -271,7 +275,7 @@ paths:
       parameters:
         - in: body
           name: user
-          description: users details
+          description: json body
           schema:
             type: object
             required:

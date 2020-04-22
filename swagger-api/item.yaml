@@ -49,7 +49,7 @@ paths:
       parameters:
         - in: body
           name: user
-          description: users details
+          description: json body
           schema:
             type: object
             required:
@@ -90,7 +90,7 @@ paths:
       parameters:
         - in: body
           name: user
-          description: users details
+          description: json body
           schema:
             type: object
             required:
