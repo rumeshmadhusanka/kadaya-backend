@@ -122,12 +122,25 @@ paths:
                 type: string
               buyer_id:
                 type: string
+                example: 0fc38e1b-01ea-4d7d-95f2-75f0c0ff4136
               shop_id:
                 type: string
+                example: 3cb763b9-548f-4161-a92f-72f48d0bd693
               total_price:
                 type: number
               items_list:
-                type: object
+                type: array
+                description: items list
+                items:
+                  required:
+                    - item_id
+                    - amount
+                  properties:
+                    item_id:
+                      type: string
+                      example: 29c58574-d509-4150-81e3-790dcd28ea35
+                    amount:
+                      type: number
       responses:
         201:
           description: Updated

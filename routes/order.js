@@ -48,18 +48,18 @@ router.post('/', async (req, res) => {
     let total_price = req.body.total_price;
     let items_list = req.body.items_list; //this is a list
 
-    let started = new Date().getTime();
-    let last_updated_timestamp = new Date().getTime();
+    let started =  Date.now();
+    let last_updated_timestamp =  Date.now();
 
     let reply;
     let code;
     try {
         let result = await order_obj.createNewOrder(id, buyer_id, shop_id, message_body, started, last_updated_timestamp, total_price, items_list);
-        if (result.rowCount === 1) {
-            reply = {"status": "success"};
+        if (result) {
+            reply = {"msg": "success"};
             code = 200;
         } else {
-            reply = {"status": "failed"};
+            reply = {"msg": "failed"};
             code = 400;
         }
 
