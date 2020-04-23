@@ -74,6 +74,8 @@ paths:
 
   /buyer/{buyer_id}:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get by id
       tags:
         - Buyer
@@ -94,6 +96,8 @@ paths:
 
 
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Update exsiting buyer
       tags:
         - Buyer
@@ -135,6 +139,8 @@ paths:
 
   /buyer/{buyer_id}/location:
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Update location of a buyer
       tags:
         - Buyer
@@ -171,6 +177,8 @@ paths:
 
   /buyer/{buyer_id}/history:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get order history of a buyer
       tags:
         - Buyer
@@ -194,6 +202,8 @@ paths:
 
   /buyer/{buyer_id}/current-orders:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get by current orders by id
       tags:
         - Buyer
