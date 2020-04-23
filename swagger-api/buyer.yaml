@@ -27,17 +27,6 @@ securityDefinitions:
     name: x-access-token
 paths:
   /buyer/:
-    get:
-      summary: Get all
-      tags:
-        - Buyer
-      consumes:
-        - application/json
-      responses:
-        200:
-          description: OK
-        502:
-          description: Server Error
     post:
       summary: Sign up
       tags:
@@ -70,9 +59,9 @@ paths:
               password:
                 type: string
               latitude:
-                type: string
+                type: number
               longitude:
-                type: string
+                type: number
       responses:
         201:
           description: Updated
@@ -113,6 +102,10 @@ paths:
       produces:
         - application/json
       parameters:
+        - in: path
+          name: buyer_id
+          type: string
+          required: true
         - in: body
           name: user
           description: json body
@@ -177,7 +170,7 @@ paths:
 
 
   /buyer/{buyer_id}/history:
-    put:
+    get:
       summary: Get order history of a buyer
       tags:
         - Buyer
@@ -190,19 +183,6 @@ paths:
           name: buyer_id
           required: true
           type: string
-        - in: body
-          name: user
-          description: json body
-          schema:
-            type: object
-            required:
-              - latitude
-              - longitude
-            properties:
-              latitude:
-                type: number
-              longitude:
-                type: number
       responses:
         200:
           description: Updated

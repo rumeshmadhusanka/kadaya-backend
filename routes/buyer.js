@@ -10,14 +10,14 @@ const config = {
     "secret": process.env.JWT_SECRET,
 };
 
-router.get('/', async (req, res) => {
-    try {
-        await res.json(await buyer_obj.getAll());
-    } catch (e) {
-        await res.status(502).json({"msg": e.name + " " + e.message})
-    }
-
-});
+// router.get('/', async (req, res) => {
+//     try {
+//         await res.json(await buyer_obj.getAll());
+//     } catch (e) {
+//         await res.status(502).json({"msg": e.name + " " + e.message})
+//     }
+//
+// });
 
 router.get('/:buyer_id', async (req, res) => {
     let buyer_id = req.params['buyer_id'];
@@ -40,6 +40,9 @@ router.put('/:buyer_id', async (req, res) => {
     let email = req.body.email;
     let address = req.body.address;
     let phone = req.body.phone;
+    if (!phone){
+        await res.status(400).json({"msg": "phone number cannot be empty"})
+    }
 
     let result;
     try {

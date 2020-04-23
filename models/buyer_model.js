@@ -24,8 +24,8 @@ class Buyer {
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [buyer_id]);
-                console.log(rows);
-                resolve(rows);
+                console.log(rows[0]);
+                resolve(rows[0]);
 
             } catch (e) {
                 reject(e)
@@ -37,7 +37,7 @@ class Buyer {
     }
 
     async getBuyingHistory(buyer_id) {
-        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND state='COMPLETED'";
+        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND state='COMPLETED' OR state= 'CANCELLED'";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [buyer_id]);
@@ -54,7 +54,7 @@ class Buyer {
     }
 
     async getOngoingOrders(buyer_id) {
-        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND state!='COMPLETED'";
+        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND (state!='COMPLETED' AND state!='CANCELLED')";
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [buyer_id]);
@@ -75,9 +75,9 @@ class Buyer {
         let query_str = "UPDATE public.buyer set name=COALESCE(($2),name), email=COALESCE(($3),email), address=COALESCE(($4),address), phone=COALESCE(($5),phone) where buyer_id = ($1)";
         return new Promise(async (resolve, reject) => {
             try {
-                let {rows} = await pg_pool.query(query_str, [buyer_id, name, email, address, phone]);
-                console.log(rows);
-                resolve(rows);
+                let result = await pg_pool.query(query_str, [buyer_id, name, email, address, phone]);
+                console.log(result);
+                resolve(result);
 
             } catch (e) {
                 reject(e)
@@ -91,9 +91,9 @@ class Buyer {
         let query_str = "UPDATE public.buyer set latitude=COALESCE(($2),latitude), longitude=COALESCE(($3),longitude) where buyer_id = ($1)";
         return new Promise(async (resolve, reject) => {
             try {
-                let {rows} = await pg_pool.query(query_str, [buyer_id, lat, long]);
-                console.log(rows);
-                resolve(rows);
+                let result = await pg_pool.query(query_str, [buyer_id, lat, long]);
+                console.log(result);
+                resolve(result);
 
             } catch (e) {
                 reject(e)

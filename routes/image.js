@@ -74,8 +74,10 @@ let upload = multer({
 router.post('/shop/:shop_id', upload.array('image', 5), async (req, res, next)=> {
     let shop_id = req.params.shop_id;
     try{
+        console.log("Inside ");
         console.log(req.files);
         for (let i = 0; i < req.files.length; i++) {
+            // save the file name to database
              await image_obj.saveUploadUrl(req.files[i].location,shop_id)
         }
         await res.json({"msg": req.files.length})

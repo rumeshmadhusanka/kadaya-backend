@@ -38,9 +38,26 @@ paths:
           description: OK
         502:
           description: Server Error
-  /category/shops/:
+  /category/{category}/shops/:
     get:
       summary: Get shops categorized
+      parameters:
+        - in: path
+          required: true
+          name: category
+          type: string
+        - in: query
+          name: latitude
+          type: number
+          required: true
+        - in: query
+          name: longitude
+          type: number
+          required: true
+        - in: query
+          name: radius
+          type: number
+          required: true
       tags:
         - Category
       consumes:
