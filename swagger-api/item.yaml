@@ -59,12 +59,13 @@ paths:
             properties:
               shop_id:
                 type: string
+                example: 26c2a01a-ff93-4a30-ac1e-e1da49abc7d5
               name:
                 type: string
               description:
                 type: string
               amount_available:
-                type: string
+                type: integer
               price:
                 type: number
               photo_id:
@@ -88,28 +89,27 @@ paths:
       produces:
         - application/json
       parameters:
+        - in: path
+          required: true
+          type: string
+          name: id
         - in: body
           name: user
           description: json body
           schema:
             type: object
             required:
-              - shop_id
               - name
               - price
             properties:
-              shop_id:
-                type: string
               name:
                 type: string
               description:
                 type: string
               amount_available:
-                type: string
+                type: number
               price:
                 type: number
-              photo_id:
-                type: string
               unit:
                 type: string
       responses:
@@ -126,7 +126,7 @@ paths:
       consumes:
         - application/json
       parameters:
-        - name: shop_id
+        - name: id
           in: path
           required: true
           type: string
@@ -185,7 +185,7 @@ paths:
           required: true
         - in: path
           name: value
-          type: integer
+          type: number
           required: true
       responses:
         200:

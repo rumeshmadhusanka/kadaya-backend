@@ -80,6 +80,9 @@ router.put('/:id', async (req, res) => {
     let amount_available = req.body.amount_available;
     let price = req.body.price;
     let unit = req.body.unit;
+    if (!name || !price){
+
+    }
 
     try {
         let result = await item_obj.updateItem(name, description, amount_available, price, unit, id);
