@@ -159,7 +159,7 @@ router.post('/', async (req, res) => {
     try {
         let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password_hash, phone, category,open_hours,is_open,contact_numbers);
         if (result.rowCount === 1) {
-            reply = {"msg": "success"};
+            reply = {"msg": "success","shop_id":shop_id};
             code = 200;
         } else {
             reply = {"msg": "failed"};
