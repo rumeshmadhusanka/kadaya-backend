@@ -13,12 +13,19 @@ class Order {
 	}
 
 	async getOngoingOrdersByIdForShop(shop_id) {
-		let query_str = 'SELECT * FROM public.order where shop_id=($1) and state!=($2)';
+		let query_str = 'SELECT * FROM public.order left outer join buyer on buyer.buyer_id = "order".buyer_id where shop_id=($1) and state!=($2)';
 
 		return new Promise(async (resolve, reject) => {
 			try {
 				let {rows} = await pg_pool.query(query_str, [shop_id, "COMPLETED"]);
-				//console.log(rows);
+				console.log(rows);
+				for (let i = 0; i < rows.length; i++) {
+					delete rows[i].password;
+					delete rows[i].email;
+					delete rows[i].latitude;
+					delete rows[i].longitude;
+					delete rows[i].phone;
+				}
 				resolve(rows);
 			} catch (e) {
 				reject(e)
@@ -27,11 +34,18 @@ class Order {
 	}
 
 	async getOrderHistoryByIdForShop(shop_id) {
-		let query_str = 'SELECT * FROM public.order where shop_id=($1) and state=($2)';
+		let query_str = 'SELECT * FROM public.order left outer join buyer on buyer.buyer_id = "order".buyer_id where shop_id=($1) and state=($2)';
 		return new Promise(async (resolve, reject) => {
 			try {
 				let {rows} = await pg_pool.query(query_str, [shop_id, "COMPLETED"]);
 				//console.log(rows);
+				for (let i = 0; i < rows.length; i++) {
+					delete rows[i].password;
+					delete rows[i].email;
+					delete rows[i].latitude;
+					delete rows[i].longitude;
+					delete rows[i].phone;
+				}
 				resolve(rows);
 			} catch (e) {
 				reject(e)
