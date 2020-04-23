@@ -44,7 +44,7 @@ paths:
         502:
           description: Server Error
 
-  /oder/buyer/{buyer_id}/history:
+  /order/buyer/{buyer_id}/history:
     get:
       summary: Get order history for a buyer
       tags:
