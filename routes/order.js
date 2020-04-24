@@ -5,6 +5,15 @@ const uniqueId = require('uuid/v4');
 
 let order_obj = new Order();
 
+router.get('/:order_id', async (req, res) => {
+    let order_id= req.params['order_id'];
+    try {
+        await res.json(await order_obj.getOrder(order_id));
+    } catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
+    }
+});
+
 router.get('/buyer/:buyer_id/ongoing', async (req, res) => {
     let buyer_id = req.params['buyer_id'];
     try {

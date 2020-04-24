@@ -4,6 +4,25 @@ const Buyer = require('./buyer_model');
 let buyer_obj1 = new Buyer();
 
 class Order {
+	async getOrder(order_id) {
+		let query_str = 'SELECT * FROM public."order" left outer join buyer on buyer.buyer_id = "order".buyer_id where "order".id = ($1)';
+
+		return new Promise(async (resolve, reject) => {
+			try {
+				let {rows} = await pg_pool.query(query_str, [order_id]);
+				rows = rows[0]
+				console.log(rows);
+				delete rows.password;
+				delete rows.email;
+				delete rows.latitude;
+				delete rows.longitude;
+				resolve(rows);
+			} catch (e) {
+				reject(e)
+			}
+		})
+	}
+
 	getOrderHistoryByIdForBuyer(buyer_id) {
 		return buyer_obj1.getBuyingHistory(buyer_id)
 	}
@@ -24,7 +43,6 @@ class Order {
 					delete rows[i].email;
 					delete rows[i].latitude;
 					delete rows[i].longitude;
-					delete rows[i].phone;
 				}
 				resolve(rows);
 			} catch (e) {
@@ -44,7 +62,6 @@ class Order {
 					delete rows[i].email;
 					delete rows[i].latitude;
 					delete rows[i].longitude;
-					delete rows[i].phone;
 				}
 				resolve(rows);
 			} catch (e) {
@@ -70,7 +87,7 @@ class Order {
 						console.log("item_id", items_list[i].item_id);
 						console.log("amount", items_list[i].amount);
 
-						prom_list.push(pg_pool.query(query2, [id, items_list[i].item_id, items_list[i].amount,items_list[i].item_id,items_list[i].amount]));
+						prom_list.push(pg_pool.query(query2, [id, items_list[i].item_id, items_list[i].amount, items_list[i].item_id, items_list[i].amount]));
 					}
 					console.log("check4")
 					Promise.all(prom_list).then(async (rs) => {

@@ -26,6 +26,23 @@ securityDefinitions:
     in: header
     name: x-access-token
 paths:
+  /order/{order_id}/:
+    get:
+      summary: Get an order details with buyer info
+      tags:
+        - Order
+      parameters:
+        - in: path
+          required: true
+          name: order_id
+          type: string
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
   /order/buyer/{buyer_id}/ongoing:
     get:
       summary: Get ongoing orders for a buyer
