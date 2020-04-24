@@ -1,15 +1,9 @@
 const { Pool } = require('pg');
 
-let pgConfig ={
-    user: process.env.POSTGRESQL_USER,
-    host: process.env.POSTGRESQL_HOST,
-    database: process.env.POSTGRESQL_DATABASE,
-    password: process.env.POSTGRESQL_PASSWORD,
-    port: process.env.POSTGRESQL_PORT,
-    // ssl: process.env.POSTGRESQL_SSL,
-    // rejectUnauthorized: process.env.POSTGRESQL_REJECT_UNAUTORIZED
+const conf = {
+    "connectionString":process.env.DATABASE_URL
 };
 
-const pool = new Pool(pgConfig);
+const pool = new Pool(conf);
 
 module.exports = pool;
