@@ -23,6 +23,19 @@ class Order {
 		})
 	}
 
+	async getOrderItems(order_id){
+		let query_str = 'SELECT * FROM public.order_item left outer join item on item.id = order_item.item_id where order_id=($1)';
+
+		return new Promise(async (resolve, reject) => {
+			try {
+				let {rows} = await pg_pool.query(query_str, [order_id]);
+				resolve(rows);
+			} catch (e) {
+				reject(e)
+			}
+		})
+	}
+
 	getOrderHistoryByIdForBuyer(buyer_id) {
 		return buyer_obj1.getBuyingHistory(buyer_id)
 	}
@@ -122,12 +135,12 @@ class Order {
 		})
 	}
 
-	async updateOrderStatus(state, id) {
-		let query_str = "UPDATE public.order set state =($1), last_updated_timestamp=($2) where id=($3)";
+	async updateOrderStatus(state, id,shops_reply) {
+		let query_str = "UPDATE public.order set state =($1), last_updated_timestamp=($2), shops_reply=COALESCE(($4),shops_reply) where id=($3)";
 		let last_updated_timestamp = new Date().getTime();
 		return new Promise(async (resolve, reject) => {
 			try {
-				let result = await pg_pool.query(query_str, [state, last_updated_timestamp, id]);
+				let result = await pg_pool.query(query_str, [state, last_updated_timestamp, id,shops_reply]);
 				console.log(result);
 				resolve(result);
 			} catch (e) {

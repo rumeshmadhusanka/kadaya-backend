@@ -8,7 +8,9 @@ let order_obj = new Order();
 router.get('/:order_id', async (req, res) => {
     let order_id= req.params['order_id'];
     try {
-        await res.json(await order_obj.getOrder(order_id));
+        let result1 = await order_obj.getOrder(order_id);
+        result1["items"] = await order_obj.getOrderItems(order_id);
+        await res.json(result1);
     } catch (e) {
         await res.status(502).json({"msg": e.name + " " + e.message})
     }
@@ -82,9 +84,14 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     let state = req.body.state;
     let id = req.params['id'];
+    let shops_reply = req.body.shops_reply;
+
+    if (shops_reply){
+        shops_reply=null
+    }
 
     try {
-        let out = await order_obj.updateOrderStatus(state,id);
+        let out = await order_obj.updateOrderStatus(state,id,shops_reply);
         out = out.rowCount;
         console.log(out);
         await res.json({"msg": out})
