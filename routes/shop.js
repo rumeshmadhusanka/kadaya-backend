@@ -137,13 +137,13 @@ router.post('/login', async (req, res) => {
 
 router.post('/', async (req, res) => {
     let shop_id = uniqueId();
-    let name = req.body.name;
+    let name = null;
     let address = req.body.address;
     let latitude = req.body.latitude;
     let longitude = req.body.longitude;
     let comments = req.body.comments;
     let photo_id = req.body.photo_id;
-    let owner_name = req.body.owner_name;
+    let owner_name = req.body.name;
     let email = req.body.email;
     let password = req.body.password;
     let phone = req.body.phone;

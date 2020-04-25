@@ -122,12 +122,9 @@ paths:
             type: object
             required:
               - name
-              - email
               - address
               - phone
               - password
-              - latitude
-              - longitude
               - category
             properties:
               name:
@@ -141,8 +138,6 @@ paths:
               comments:
                 type: string
               photo_id:
-                type: string
-              owner_name:
                 type: string
               email:
                 type: string
