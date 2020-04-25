@@ -60,4 +60,12 @@ module.exports = {
         }
     },
 
+    isSameShopOrBuyer: async (req, res, next) => {
+        if (req.shop_id === req.params.shop_id || req.shop_id === req.query.shop_id || req.shop_id === req.body.shop_id || req.buyer_id === req.params.buyer_id || req.buyer_id === req.query.buyer_id || req.buyer_id === req.body.buyer_id) {
+            next()
+        } else {
+            return res.status(401).json({"message":"Access not authorized"});
+        }
+    },
+
 };

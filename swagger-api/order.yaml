@@ -28,7 +28,7 @@ securityDefinitions:
 paths:
   /order/{order_id}/:
     get:
-      summary: Get an order details with buyer info
+      summary: Get an order details with buyer info and items
       tags:
         - Order
       parameters:
@@ -37,6 +37,53 @@ paths:
           name: order_id
           type: string
           default: 924fa8a9-369e-446e-bde1-0fee88055299
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+    put:
+      summary: Update order status
+      tags:
+        - Order
+      parameters:
+        - in: path
+          required: true
+          name: order_id
+          type: string
+        - in: body
+          name: user
+          description: json body
+          schema:
+            type: object
+            required:
+              - state
+              - shops_reply
+            properties:
+              state:
+                type: string
+                example: COMPLETED
+              shops_reply:
+                type: string
+                example: come and pick it up
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+    delete:
+      summary: Delete an order
+      tags:
+        - Order
+      parameters:
+        - in: path
+          required: true
+          name: order_id
+          type: string
       consumes:
         - application/json
       responses:
@@ -166,48 +213,6 @@ paths:
           description: Not Found
         502:
           description: Server Error
-  /order/{id}:
-    delete:
-      summary: Delete an order
-      tags:
-        - Order
-      parameters:
-        - in: path
-          required: true
-          name: id
-          type: string
-      consumes:
-        - application/json
-      responses:
-        200:
-          description: OK
-        502:
-          description: Server Error
-    put:
-      summary: Update order status
-      tags:
-        - Order
-      parameters:
-        - in: path
-          required: true
-          name: id
-          type: string
-        - in: body
-          name: user
-          description: json body
-          schema:
-            type: object
-            required:
-              - state
-            properties:
-              state:
-                type: string
-                example: COMPLETED
-      consumes:
-        - application/json
-      responses:
-        200:
-          description: OK
-        502:
-          description: Server Error
+
+
 
