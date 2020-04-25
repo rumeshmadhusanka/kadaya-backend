@@ -36,6 +36,7 @@ paths:
           required: true
           name: order_id
           type: string
+          default: 924fa8a9-369e-446e-bde1-0fee88055299
       consumes:
         - application/json
       responses:
