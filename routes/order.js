@@ -89,7 +89,7 @@ router.put('/:id', async (req, res) => {
     let id = req.params['id'];
     let shops_reply = req.body.shops_reply;
 
-    if (shops_reply){
+    if (!shops_reply){
         shops_reply=null
     }
 
