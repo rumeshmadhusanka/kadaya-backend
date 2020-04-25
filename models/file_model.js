@@ -33,6 +33,19 @@ class FileUpload {
 			}
 		})
 	}
+
+
+	async deleteImage(url,shop_id){
+		let query_str = "DELETE FROM public.shop_photos where url=($1) and shop_id=($2)";
+		return new Promise(async (resolve, reject) => {
+			try {
+				let result = await pg_pool.query(query_str, [url,shop_id]);
+				resolve(result.rowCount);
+			} catch (e) {
+				reject(e)
+			}
+		})
+	}
 }
 
 module.exports = FileUpload;

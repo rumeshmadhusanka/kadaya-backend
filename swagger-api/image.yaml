@@ -68,4 +68,28 @@ paths:
           description: OK
         502:
           description: Server Error
+  /image/shop/{shop_id}/{url}:
+    delete:
+      summary: Delete an image
+      tags:
+        - Image
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: url
+          in: path
+          required: true
+          type: string
+        - name: shop_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        502:
+          description: Server Error
+
 

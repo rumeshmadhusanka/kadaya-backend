@@ -87,5 +87,18 @@ router.post('/shop/:shop_id', upload.array('image', 5), async (req, res, next)=>
 
 });
 
+router.delete('/shop/:shop_id/:url',  async (req, res, next)=> {
+    let url = req.params.url;
+    let shop_id = req.params.shop_id;
+    try{
+        console.log("Inside ");
+        await res.json({"msg":await image_obj.deleteImage(url,shop_id)})
+    }catch (e) {
+        await res.status(502).json({"msg": e.name + " " + e.message})
+    }
+
+});
+
+
 module.exports = router;
 
