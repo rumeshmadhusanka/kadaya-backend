@@ -37,7 +37,7 @@ class Buyer {
     }
 
     async getBuyingHistory(buyer_id) {
-        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND state='COMPLETED' OR state= 'CANCELLED'";
+        let query_str = `SELECT id,shop.shop_id, shop.name, contact_numbers,address, category,is_open,message_body,started,last_updated_timestamp,shops_reply,total_price,state FROM public.order left outer join public.shop on shop.shop_id = "order".shop_id where buyer_id=($1) AND state='COMPLETED' OR state= 'CANCELLED'`;
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [buyer_id]);
@@ -54,7 +54,7 @@ class Buyer {
     }
 
     async getOngoingOrders(buyer_id) {
-        let query_str = "SELECT id,shop_id,message_body,started,last_updated_timestamp,state FROM public.order where buyer_id=($1) AND (state!='COMPLETED' AND state!='CANCELLED')";
+        let query_str = `SELECT id,shop.shop_id, shop.name, contact_numbers,address, category,is_open,message_body,started,last_updated_timestamp,shops_reply,total_price,state FROM public.order left outer join public.shop on shop.shop_id = "order".shop_id  where buyer_id=($1) AND (state!='COMPLETED' AND state!='CANCELLED')`;
         return new Promise(async (resolve, reject) => {
             try {
                 let {rows} = await pg_pool.query(query_str, [buyer_id]);
