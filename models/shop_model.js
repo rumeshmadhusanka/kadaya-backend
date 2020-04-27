@@ -2,6 +2,22 @@ const pg_pool = require('../middleware/db');
 const bcrypt = require('bcryptjs');
 
 class Shop {
+
+    async getShopById(shop_id){
+        //todo remove password from result set
+        let query_str = "SELECT shop_id, name, address, latitude, longitude, comments, photo_id, email, category, open_hours, is_open, contact_numbers FROM public.shop where shop_id=($1)";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let {rows} = await pg_pool.query(query_str,[shop_id]);
+                console.log(rows);
+                resolve(rows);
+            } catch (e) {
+                reject(e)
+            }
+
+        })
+
+    }
     async getAllShops(){
         //todo remove password from result set
         let query_str = "SELECT shop_id, name, address, latitude, longitude, comments, photo_id, email, category, open_hours, is_open, contact_numbers FROM public.shop";

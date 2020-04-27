@@ -1,11 +1,13 @@
 const router = require("express").Router();
 const Order = require('../models/order_model');
 const Buyer =  require('../models/buyer_model');
+const Shop = require('../models/shop_model');
 const uniqueId = require('uuid/v4');
 
 
 let order_obj = new Order();
 let buyer_obj = new Buyer();
+let shop_obj = new Shop();
 
 router.get('/:order_id', async (req, res) => {
     let order_id= req.params['order_id'];
@@ -13,6 +15,7 @@ router.get('/:order_id', async (req, res) => {
         let result1 = await order_obj.getOrder(order_id);
         result1["items"] = await order_obj.getOrderItems(order_id);
         result1["buyer_details"] = await buyer_obj.getByFirebaseId(result1["buyer_id"]);
+        result1["shop_details"] = await shop_obj.getShopById(result1["shop_id"]);
         await res.json(result1);
     } catch (e) {
         await res.status(502).json({"msg": e.name + " " + e.message})
