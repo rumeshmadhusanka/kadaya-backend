@@ -136,6 +136,44 @@ paths:
           description: Not Found
         502:
           description: Server Error
+  /buyer/{buyer_id}/password:
+    put:
+      summary: Change buyer password
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          required: true
+          name: buyer_id
+          type: string
+          default: 0fc38e1b-01ea-4d7d-95f2-75f0c0ff4136
+        - in: body
+          name: user
+          description: json body
+          schema:
+            type: object
+            required:
+              - old_password
+              - new_password
+            properties:
+              old_password:
+                type: string
+                example: abc
+              new_password:
+                type: string
+      responses:
+        200:
+          description: Updated
+        404:
+          description: Not found
+        400:
+          description: Bad Request
+        502:
+          description: Server Error
 
   /buyer/{buyer_id}/location:
     put:

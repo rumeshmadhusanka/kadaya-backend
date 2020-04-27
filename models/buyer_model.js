@@ -144,6 +144,37 @@ class Buyer {
     }
 
 
+    async getPassword(buyer_id){
+        let query_str = "SELECT password from public.buyer where buyer_id=($1)";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let {rows} = await pg_pool.query(query_str, [buyer_id]);
+                console.log(rows);
+                resolve(rows)
+            } catch (e) {
+                reject(e)
+            }
+        })
+    }
+
+    async updatePassword(buyer_id,new_pw_hash){
+        let query_str = "UPDATE public.buyer set password=($1) where buyer_id=($2)";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await pg_pool.query(query_str, [new_pw_hash, buyer_id]);
+                //console.log(result);
+                resolve(result);
+
+            } catch (e) {
+                reject(e)
+
+            }
+
+        })
+
+    }
+
+
 }
 
 module.exports = Buyer;

@@ -153,4 +153,45 @@ router.post('/', async (req, res) => {
 });
 
 
+
+router.put('/:buyer_id/password', async (req, res) => {
+	let buyer_id = req.params.buyer_id;
+	let old_password = req.body.old_password;
+	let new_password = req.body.new_password;
+
+	if(!new_password){
+		await res.status(400).json({"msg": "password cannot be empty"})
+	}
+
+	try {
+		let pw_hash_from_db = await buyer_obj.getPassword(buyer_id);
+		if (pw_hash_from_db[0]) {
+			pw_hash_from_db = pw_hash_from_db[0].password;
+			let result = await bcrypt.compare(old_password, pw_hash_from_db);
+			console.log(old_password, pw_hash_from_db);
+			console.log(result);
+			if (result === true) {
+				bcrypt.genSalt(10, function (err, salt) {
+					bcrypt.hash(new_password, salt, async function (err, new_password_hashed) {
+
+						let out = await buyer_obj.updatePassword(buyer_id, new_password_hashed);
+						out = out.rowCount;
+						console.log(out);
+						await res.json({"msg": out})
+					});
+				});
+			} else {
+				await res.status(400).json({"msg": "incorrect old password"})
+			}
+
+		} else {
+			await res.status(404).json({"msg": "invalid buyer id"})
+		}
+	} catch (e) {
+		await res.status(502).json({"msg": e.name+" "+e.message})
+	}
+
+});
+
+
 module.exports = router;
