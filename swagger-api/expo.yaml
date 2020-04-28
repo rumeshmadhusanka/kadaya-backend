@@ -1,0 +1,62 @@
+swagger: "2.0"
+info:
+  title: Kadaya Backend API Documentation
+  version: 1.0.0
+host: localhost:3000
+schemes:
+  - http
+tags:
+  - name: Shop
+    description: Shop
+  - name: Buyer
+    description: Buyer
+  - name: Category
+    description: Category
+  - name: Image
+    description: Image
+  - name: Item
+    description: Item
+  - name: Monitoring
+    description: Monitoring
+  - name: Order
+    description: Order
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: x-access-token
+paths:
+  /expo/send:
+    post:
+      summary: Send expo message
+      tags:
+        - Expo
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: json body
+          schema:
+            type: object
+            required:
+              - push_token
+              - message
+              - data_obj
+            properties:
+              push_token:
+                type: string
+              message:
+                type: string
+                example: New order arrived
+              data_obj:
+                type: string
+      responses:
+        201:
+          description: Updated
+        400:
+          description: Not Found
+        502:
+          description: Server Error
