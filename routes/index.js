@@ -7,6 +7,7 @@ module.exports = function (app) {
     app.use("/monitoring",require("./monitoring"));
     app.use("/order",require("./order"));
     app.use("/expo",require("./expo"));
+    app.use("/update",require("./app_update"));
     app.use("/", (req, res) => {
         res.status(404).json({"message": "Default Route"})
     });
