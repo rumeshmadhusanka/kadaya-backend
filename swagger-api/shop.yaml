@@ -126,6 +126,7 @@ paths:
               - phone
               - password
               - category
+              - expo_token
             properties:
               name:
                 type: string
@@ -147,6 +148,9 @@ paths:
                 type: string
               category:
                 type: string
+              expo_token:
+                type: string
+                example: ExponentPushToken[HFjeKTDLxLdS2mQI5Hk_fZ]
       responses:
         201:
           description: Updated
@@ -276,6 +280,7 @@ paths:
             required:
               - password
               - phone
+              - expo_token
             properties:
               phone:
                 type: string
@@ -283,6 +288,9 @@ paths:
               password:
                 type: string
                 example: abc
+              expo_token:
+                type: string
+                example: ExponentPushToken[HFjeKTDLxLdS2mQI5Hk_fZ]
       responses:
         200:
           description: Updated
