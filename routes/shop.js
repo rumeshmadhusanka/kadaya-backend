@@ -125,10 +125,17 @@ router.put('/:shop_id/password', async (req, res) => {
 router.post('/login', async (req, res) => {
     let phone = req.body.phone;
     let password = req.body.password;
+    let expo_token = req.body.expo_token;
     try {
         let result = await shop_obj.login(phone, password);
         let shop_id = result.shop_id;
         let token = jwt.sign({"shop_id": shop_id}, config.secret);
+
+        try{
+            shop_obj.setExpoToken(shop_id,expo_token)
+        }catch (e) {
+            console.log("Expo Token update failed for shop: "+shop_id)
+        }
         res.header('x-access-token', token).status(200).json(result);
     }catch (e) {
         await res.status(502).json({"msg": e.name+" "+e.message})
@@ -151,13 +158,14 @@ router.post('/', async (req, res) => {
     let open_hours=req.body.open_hours ;
     let is_open=req.body.is_open;
     let contact_numbers=req.body.contact_numbers;
+    let expo_token = req.body.expo_token;
 
     let password_hash = bcrypt.hashSync(password);
 
     let reply;
     let code;
     try {
-        let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password_hash, phone, category,open_hours,is_open,contact_numbers);
+        let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password_hash, phone, category,open_hours,is_open,contact_numbers,expo_token);
         if (result.rowCount === 1) {
             reply = {"msg": "success","shop_id":shop_id};
             code = 200;

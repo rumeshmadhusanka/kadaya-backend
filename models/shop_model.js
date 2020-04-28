@@ -3,6 +3,33 @@ const bcrypt = require('bcryptjs');
 
 class Shop {
 
+    async getExpoToken(shop_id){
+        let query_str = "SELECT expo_token FROM public.shop where shop_id=($1)";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let {rows} = await pg_pool.query(query_str, [shop_id]);
+                console.log(rows[0]);
+                resolve(rows[0]["expo_token"]);
+            } catch (e) {
+                reject(e)
+            }
+
+        })
+    }
+
+    async setExpoToken(shop_id,expo_token){
+        let query_str = "UPDATE public.shop set expo_token = ($2) where shop_id=($1)";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await pg_pool.query(query_str, [shop_id,expo_token]);
+                resolve(result.rowCount);
+            } catch (e) {
+                reject(e)
+            }
+
+        })
+    }
+
     async getShopById(shop_id){
         //todo remove password from result set
         let query_str = "SELECT shop_id, name, address, latitude, longitude, comments, photo_id, email, category, open_hours, is_open, contact_numbers FROM public.shop where shop_id=($1)";
@@ -173,11 +200,11 @@ class Shop {
 
 
 
-    async addNewShop(id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers){
-        let query_str = "INSERT INTO public.shop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers) values (($1),($2),($3),($4),($5),($6),($7),($8),($9),($10),($11),($12),($13),($14),($15))";
+    async addNewShop(id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers, expo_token){
+        let query_str = "INSERT INTO public.shop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers,expo_token) values (($1),($2),($3),($4),($5),($6),($7),($8),($9),($10),($11),($12),($13),($14),($15),($16))";
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await pg_pool.query(query_str,[id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers]);
+                let result = await pg_pool.query(query_str,[id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password, phone, category,open_hours,is_open,contact_numbers, expo_token]);
                 console.log(result);
                 resolve(result);
             } catch (e) {
