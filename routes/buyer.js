@@ -110,11 +110,17 @@ router.get('/:buyer_id/current-orders', verifyToken, isBuyer, isSameBuyer,async 
 router.post('/login', async (req, res) => {
 	let phone = req.body.phone;
 	let password = req.body.password;
+	let expo_token = req.body.expo_token;
 
 	try {
 		let result = await buyer_obj.login(phone, password);
 		let buyer_id = result.buyer_id;
 		let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
+		try {
+			buyer_obj.setExpoToken(buyer_id, expo_token);
+		}catch (e) {
+			console.log("Could not set expo token")
+		}
 		res.header('x-access-token', token).status(200).json(result);
 	} catch (e) {
 		await res.status(502).json({"msg": e.name + " " + e.message})
@@ -131,12 +137,13 @@ router.post('/', async (req, res) => {
 	let latitude = req.body.latitude;
 	let longitude = req.body.longitude;
 	let password = req.body.password;
+	let expo_token = req.body.expo_token;
 
 	let password_hash = bcrypt.hashSync(password);
 	let reply;
 	let code;
 	try {
-		let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password_hash);
+		let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password_hash,expo_token);
 		if (result.rowCount === 1) {
 			reply = {"status": "success", "buyer_id": buyer_id};
 			code = 201;
