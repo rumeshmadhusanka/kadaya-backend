@@ -4,13 +4,14 @@ const Buyer = require('../models/buyer_model');
 const Shop = require('../models/shop_model');
 const uniqueId = require('uuid/v4');
 const ExpoMessenger = require('../middleware/expo');
+const {verifyToken, isShop, isBuyer, isSameBuyer, isSameShop, isSameShopOrBuyer} = require('../middleware/auth');
 
 let expo_obj = new ExpoMessenger();
 let order_obj = new Order();
 let buyer_obj = new Buyer();
 let shop_obj = new Shop();
 
-router.get('/:order_id', async (req, res) => {
+router.get('/:order_id', verifyToken, async (req, res) => {
 	let order_id = req.params['order_id'];
 	try {
 		let result1 = await order_obj.getOrder(order_id);
@@ -23,7 +24,7 @@ router.get('/:order_id', async (req, res) => {
 	}
 });
 
-router.get('/buyer/:buyer_id/ongoing', async (req, res) => {
+router.get('/buyer/:buyer_id/ongoing', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	let buyer_id = req.params['buyer_id'];
 	try {
 		await res.json(await order_obj.getOngoingOrdersByIdForBuyer(buyer_id));
@@ -32,7 +33,7 @@ router.get('/buyer/:buyer_id/ongoing', async (req, res) => {
 	}
 });
 
-router.get('/buyer/:buyer_id/history', async (req, res) => {
+router.get('/buyer/:buyer_id/history', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	let buyer_id = req.params['buyer_id'];
 	try {
 		await res.json(await order_obj.getOrderHistoryByIdForBuyer(buyer_id));
@@ -41,7 +42,7 @@ router.get('/buyer/:buyer_id/history', async (req, res) => {
 	}
 });
 
-router.get('/shop/:shop_id/ongoing', async (req, res) => {
+router.get('/shop/:shop_id/ongoing', verifyToken, isShop, isShop, async (req, res) => {
 	let shop_id = req.params['shop_id'];
 	try {
 		await res.json(await order_obj.getOngoingOrdersByIdForShop(shop_id));
@@ -49,7 +50,7 @@ router.get('/shop/:shop_id/ongoing', async (req, res) => {
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
-router.get('/shop/:shop_id/history', async (req, res) => {
+router.get('/shop/:shop_id/history', verifyToken, isShop, isShop, async (req, res) => {
 	let shop_id = req.params['shop_id'];
 	try {
 		await res.json(await order_obj.getOrderHistoryByIdForShop(shop_id));
@@ -58,7 +59,7 @@ router.get('/shop/:shop_id/history', async (req, res) => {
 	}
 });
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	try {
 		let id = uniqueId();
 		let buyer_id = req.body.buyer_id;
@@ -96,7 +97,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
 	let state = req.body.state;
 	let id = req.params['id'];
 	let shops_reply = req.body.shops_reply;
@@ -122,12 +123,12 @@ router.put('/:id', async (req, res) => {
 		console.log(out);
 
 		try {
-		    if(message) {
-                let row = await order_obj.getOrder(id);
-                let buyer_id = row.buyer_id;
-                let expo_buyer_token = await buyer_obj.getExpoToken(buyer_id);
-                expo_obj.sendMessage(expo_buyer_token, message, {})
-            }
+			if (message) {
+				let row = await order_obj.getOrder(id);
+				let buyer_id = row.buyer_id;
+				let expo_buyer_token = await buyer_obj.getExpoToken(buyer_id);
+				expo_obj.sendMessage(expo_buyer_token, message, {})
+			}
 
 		} catch (e) {
 			console.log("Message could not be sent")
@@ -139,7 +140,7 @@ router.put('/:id', async (req, res) => {
 
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
 	let id = req.params['id'];
 
 	try {

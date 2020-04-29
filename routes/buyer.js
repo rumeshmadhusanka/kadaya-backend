@@ -3,7 +3,7 @@ const Buyer = require('../models/buyer_model');
 const jwt = require('jsonwebtoken');
 const uniqueId = require('uuid/v4');
 const bcrypt = require('bcryptjs');
-const {verifyToken, isBuyer, isSameBuyer} = require('../middleware/auth')
+const {verifyToken, isBuyer, isSameBuyer} = require('../middleware/auth');
 
 
 let buyer_obj = new Buyer();
@@ -35,7 +35,7 @@ router.get('/:buyer_id', verifyToken, isBuyer, isSameBuyer, async (req, res) => 
 });
 
 
-router.put('/:buyer_id', verifyToken, isBuyer, isSameBuyer,async (req, res) => {
+router.put('/:buyer_id', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	let buyer_id = req.params['buyer_id'];
 	let name = req.body.name;
 	let email = req.body.email;
@@ -60,7 +60,7 @@ router.put('/:buyer_id', verifyToken, isBuyer, isSameBuyer,async (req, res) => {
 
 });
 
-router.put('/:buyer_id/location', verifyToken, isBuyer, isSameBuyer,async (req, res) => {
+router.put('/:buyer_id/location', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	let buyer_id = req.params['buyer_id'];
 	let latitude = req.body.latitude;
 	let longitude = req.body.longitude;
@@ -80,7 +80,7 @@ router.put('/:buyer_id/location', verifyToken, isBuyer, isSameBuyer,async (req, 
 });
 
 
-router.get('/:buyer_id/history', verifyToken, isBuyer, isSameBuyer,async (req, res) => {
+router.get('/:buyer_id/history', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	let buyer_id = req.params.buyer_id;
 	try {
 		if (buyer_id) {
@@ -94,7 +94,7 @@ router.get('/:buyer_id/history', verifyToken, isBuyer, isSameBuyer,async (req, r
 
 });
 
-router.get('/:buyer_id/current-orders', verifyToken, isBuyer, isSameBuyer,async (req, res) => {
+router.get('/:buyer_id/current-orders', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	let buyer_id = req.params.buyer_id;
 	try {
 		if (buyer_id) {
@@ -118,7 +118,7 @@ router.post('/login', async (req, res) => {
 		let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
 		try {
 			buyer_obj.setExpoToken(buyer_id, expo_token);
-		}catch (e) {
+		} catch (e) {
 			console.log("Could not set expo token")
 		}
 		res.header('x-access-token', token).status(200).json(result);
@@ -143,7 +143,7 @@ router.post('/', async (req, res) => {
 	let reply;
 	let code;
 	try {
-		let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password_hash,expo_token);
+		let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password_hash, expo_token);
 		if (result.rowCount === 1) {
 			reply = {"status": "success", "buyer_id": buyer_id};
 			code = 201;
@@ -160,13 +160,12 @@ router.post('/', async (req, res) => {
 });
 
 
-
-router.put('/:buyer_id/password', async (req, res) => {
+router.put('/:buyer_id/password', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 	let buyer_id = req.params.buyer_id;
 	let old_password = req.body.old_password;
 	let new_password = req.body.new_password;
 
-	if(!new_password){
+	if (!new_password) {
 		await res.status(400).json({"msg": "password cannot be empty"})
 	}
 
@@ -195,7 +194,7 @@ router.put('/:buyer_id/password', async (req, res) => {
 			await res.status(404).json({"msg": "invalid buyer id"})
 		}
 	} catch (e) {
-		await res.status(502).json({"msg": e.name+" "+e.message})
+		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
 });

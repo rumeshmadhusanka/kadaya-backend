@@ -6,6 +6,7 @@ const sharp = require('sharp');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const Image = require('../models/file_model');
+const {verifyToken, isShop, isSameShop} = require('../middleware/auth');
 
 let image_obj = new Image();
 
@@ -43,7 +44,7 @@ let s3 = new AWS.S3();
 // });
 
 
-router.get('/shop/:shop_id/keys', async (req, res) => {
+router.get('/shop/:shop_id/keys', verifyToken, async (req, res) => {
 	let shop_id = req.params['shop_id'];
 	try {
 		let result = await image_obj.getAllImageKeysOfAShop(shop_id);
@@ -71,7 +72,7 @@ let upload = multer({
 	})
 });
 
-router.post('/shop/:shop_id', upload.array('image', 5), async (req, res, next) => {
+router.post('/shop/:shop_id', verifyToken, isShop, isSameShop, upload.array('image', 5), async (req, res, next) => {
 	let shop_id = req.params.shop_id;
 	try {
 		console.log("Inside ");
@@ -89,7 +90,7 @@ router.post('/shop/:shop_id', upload.array('image', 5), async (req, res, next) =
 
 });
 
-router.delete('/shop/:shop_id/:url', async (req, res, next) => {
+router.delete('/shop/:shop_id/:url', verifyToken, isShop, isSameShop, async (req, res, next) => {
 	let url = req.params.url;
 	let shop_id = req.params.shop_id;
 	try {
