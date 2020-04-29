@@ -28,6 +28,8 @@ securityDefinitions:
 paths:
   /shop/:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get all
       parameters:
         - in: query
@@ -52,6 +54,8 @@ paths:
         502:
           description: Server Error
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Update shop main details
       tags:
         - Shop
@@ -78,7 +82,7 @@ paths:
             properties:
               shop_id:
                 type: string
-                example: 26c2a01a-ff93-4a30-ac1e-e1da49abc7d5
+                example: 3cb763b9-548f-4161-a92f-72f48d0bd693
               name:
                 type: string
               address:
@@ -162,6 +166,8 @@ paths:
 
   /shop/{category}/:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get by category
       parameters:
         - in: path
@@ -192,6 +198,8 @@ paths:
 
   /shop/{shop_id}/location/:
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Update shop location
       tags:
         - Shop
@@ -204,6 +212,7 @@ paths:
           required: true
           type: string
           name: shop_id
+          default: 3cb763b9-548f-4161-a92f-72f48d0bd693
         - in: body
           name: user
           description: json body
@@ -227,6 +236,8 @@ paths:
 
   /shop/{shop_id}/password/:
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Change shop password
       tags:
         - Shop
@@ -239,6 +250,7 @@ paths:
           required: true
           name: shop_id
           type: string
+          default: 3cb763b9-548f-4161-a92f-72f48d0bd693
         - in: body
           name: user
           description: json body

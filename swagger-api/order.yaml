@@ -28,6 +28,8 @@ securityDefinitions:
 paths:
   /order/{order_id}/:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get an order details with buyer info and items
       tags:
         - Order
@@ -45,6 +47,8 @@ paths:
         502:
           description: Server Error
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Update order status
       tags:
         - Order
@@ -76,6 +80,8 @@ paths:
         502:
           description: Server Error
     delete:
+      security:
+        - ApiKeyAuth: []
       summary: Delete an order
       tags:
         - Order
@@ -93,6 +99,8 @@ paths:
           description: Server Error
   /order/buyer/{buyer_id}/ongoing:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get ongoing orders for a buyer
       tags:
         - Order
@@ -111,6 +119,8 @@ paths:
 
   /order/buyer/{buyer_id}/history:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get order history for a buyer
       tags:
         - Order
@@ -129,6 +139,8 @@ paths:
 
   /order/shop/{shop_id}/ongoing:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get order history for a shop
       tags:
         - Order
@@ -147,6 +159,8 @@ paths:
 
   /order/shop/{shop_id}/history:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get order history for a shop
       tags:
         - Order
@@ -164,6 +178,8 @@ paths:
           description: Server Error
   /order/:
     post:
+      security:
+        - ApiKeyAuth: []
       summary: Add new Order
       tags:
         - Order

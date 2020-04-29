@@ -28,6 +28,8 @@ securityDefinitions:
 paths:
   /item/:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get all items
       tags:
         - Item
@@ -39,6 +41,8 @@ paths:
         502:
           description: Server Error
     post:
+      security:
+        - ApiKeyAuth: []
       summary: Add new Item
       tags:
         - Item
@@ -81,6 +85,8 @@ paths:
           description: Server Error
   /item/{id}:
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Update Item
       tags:
         - Item
@@ -120,6 +126,8 @@ paths:
         502:
           description: Server Error
     delete:
+      security:
+        - ApiKeyAuth: []
       summary: Delete Item
       tags:
         - Item
@@ -137,6 +145,8 @@ paths:
           description: Server Error
   /item/shop/{shop_id}:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get all items
       tags:
         - Item
@@ -154,6 +164,8 @@ paths:
           description: Server Error
   /item/search/:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Search items
       tags:
         - Item
@@ -171,6 +183,8 @@ paths:
           description: Server Error
   /item/{id}/amount/{value}:
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Update Item's available amount
       tags:
         - Item

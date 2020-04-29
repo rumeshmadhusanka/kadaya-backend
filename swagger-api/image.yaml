@@ -28,6 +28,8 @@ securityDefinitions:
 paths:
   /image/shop/{shop_id}/keys:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get all the images' URLs for a shop
       tags:
         - Image
@@ -47,6 +49,8 @@ paths:
           description: Server Error
   /image/shop/{shop_id}/:
     post:
+      security:
+        - ApiKeyAuth: []
       summary: upload image/images
       tags:
         - Image
@@ -70,6 +74,8 @@ paths:
           description: Server Error
   /image/shop/{shop_id}/{url}:
     delete:
+      security:
+        - ApiKeyAuth: []
       summary: Delete an image
       tags:
         - Image

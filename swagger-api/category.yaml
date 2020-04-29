@@ -28,6 +28,8 @@ securityDefinitions:
 paths:
   /category/:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get all
       tags:
         - Category
@@ -40,6 +42,8 @@ paths:
           description: Server Error
   /category/{category}/shops/:
     get:
+      security:
+        - ApiKeyAuth: []
       summary: Get shops categorized
       parameters:
         - in: path

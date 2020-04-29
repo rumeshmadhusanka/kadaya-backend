@@ -142,6 +142,8 @@ paths:
           description: Server Error
   /buyer/{buyer_id}/password:
     put:
+      security:
+        - ApiKeyAuth: []
       summary: Change buyer password
       tags:
         - Buyer
