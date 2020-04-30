@@ -164,7 +164,7 @@ router.post('/', async (req, res) => {
 	let phone = req.body.phone;
 	let category = req.body.category;
 	let open_hours = req.body.open_hours;
-	let is_open = req.body.is_open;
+	let is_open = req.body.is_open || true;
 	let contact_numbers = req.body.contact_numbers;
 	let expo_token = req.body.expo_token;
 
