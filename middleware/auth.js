@@ -10,11 +10,13 @@ module.exports = {
 
         let token = req.headers['x-access-token'];
         if (!token) {
+            console.log("Token not found");
             return res.status(403).json({"message":"Login to proceed. No token found"});
         }
 
         jwt.verify(token, config.secret, (error, decoded) => {
             if (error) {
+                console.log("Token corrupted");
                 return res.status(403).json({"message":"Token Corrupted"});
             }
             if (typeof (decoded.buyer_id) !== 'undefined') {
@@ -32,6 +34,7 @@ module.exports = {
         if (req.user_type === 'SHOP') {
             next()
         } else {
+            console.log("Not authorized");
             return res.status(401).json({"message":"Access not authorized"});
         }
     },
@@ -40,6 +43,7 @@ module.exports = {
         if (req.user_type === 'BUYER') {
             next()
         } else {
+            console.log("Not authorized");
             return res.status(401).json({"message":"Access not authorized"});
         }
     },
@@ -48,6 +52,7 @@ module.exports = {
         if (req.buyer_id === req.params.buyer_id || req.buyer_id === req.query.buyer_id || req.buyer_id === req.body.buyer_id) {
             next()
         } else {
+            console.log("Not authorized");
             return res.status(401).json({"message":"Access not authorized"});
         }
     },
@@ -56,6 +61,7 @@ module.exports = {
         if (req.shop_id === req.params.shop_id || req.shop_id === req.query.shop_id || req.shop_id === req.body.shop_id) {
             next()
         } else {
+            console.log("Not authorized");
             return res.status(401).json({"message":"Access not authorized"});
         }
     },
@@ -64,6 +70,7 @@ module.exports = {
         if (req.shop_id === req.params.shop_id || req.shop_id === req.query.shop_id || req.shop_id === req.body.shop_id || req.buyer_id === req.params.buyer_id || req.buyer_id === req.query.buyer_id || req.buyer_id === req.body.buyer_id) {
             next()
         } else {
+            console.log("Not authorized");
             return res.status(401).json({"message":"Access not authorized"});
         }
     },
