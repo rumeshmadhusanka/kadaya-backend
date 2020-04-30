@@ -64,6 +64,7 @@ router.put('/', verifyToken, isShop, isSameShop, async (req, res) => {
 		console.log(out);
 		await res.json({"msg": out})
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -78,6 +79,7 @@ router.put('/:shop_id/location', verifyToken, isShop, isSameShop, async (req, re
 		console.log(out);
 		await res.json({"msg": out})
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -89,6 +91,7 @@ router.put('/:shop_id/password', verifyToken, isShop, isSameShop, async (req, re
 	let new_password = req.body.new_password;
 
 	if (!new_password) {
+		console.log({"msg": "password cannot be empty", "shop_id": shop_id});
 		await res.status(400).json({"msg": "password cannot be empty"})
 	}
 
@@ -178,6 +181,7 @@ router.post('/', async (req, res) => {
 		res.header('x-access-token', token).status(code).json(reply);
 	} catch (e) {
 		res.status(404).json({"msg": e.name + " " + e.message})
+		console.log({"msg": e.name + " " + e.message})
 	}
 });
 
