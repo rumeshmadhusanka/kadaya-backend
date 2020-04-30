@@ -50,6 +50,7 @@ router.get('/shop/:shop_id/keys', verifyToken, async (req, res) => {
 		let result = await image_obj.getAllImageKeysOfAShop(shop_id);
 		await res.json(result)
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -85,6 +86,7 @@ router.post('/shop/:shop_id', verifyToken, isShop, isSameShop, upload.array('ima
 		}
 		await res.json({"msg": req.files.length, "keys": keys_list})
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -97,6 +99,7 @@ router.delete('/shop/:shop_id/:url', verifyToken, isShop, isSameShop, async (req
 		console.log("Inside ");
 		await res.json({"msg": await image_obj.deleteImage(url, shop_id)})
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 

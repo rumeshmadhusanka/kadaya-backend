@@ -26,9 +26,11 @@ router.get('/:buyer_id', verifyToken, isBuyer, isSameBuyer, async (req, res) => 
 		if (buyer_id) {
 			await res.json(await buyer_obj.getByFirebaseId(buyer_id));
 		} else {
+			console.log({"msg": "Id not found", "buyer_id": buyer_id});
 			await res.status(404).json({"msg": "Id not found"})
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -51,9 +53,11 @@ router.put('/:buyer_id', verifyToken, isBuyer, isSameBuyer, async (req, res) => 
 		if (result.rowCount === 1) {
 			await res.status(200).json({"msg": "success"})
 		} else {
+			console.log({"msg": "failed. Could not update buyer general info", "buyer_id": buyer_id});
 			await res.status(400).json({"msg": "failed. Could not update"})
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -71,9 +75,11 @@ router.put('/:buyer_id/location', verifyToken, isBuyer, isSameBuyer, async (req,
 		if (result.rowCount === 1) {
 			await res.status(201).json({"msg": "success"})
 		} else {
+			console.log({"msg": "failed. Could not update location", "buyer_id": buyer_id});
 			await res.status(400).json({"msg": "failed. Could not update"})
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -86,9 +92,11 @@ router.get('/:buyer_id/history', verifyToken, isBuyer, isSameBuyer, async (req, 
 		if (buyer_id) {
 			await res.json(await buyer_obj.getBuyingHistory(buyer_id));
 		} else {
+			console.log({"msg": "failed. Could not get history", "buyer_id": buyer_id});
 			await res.status(404).json({"msg": "buyer not found"});
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -100,9 +108,11 @@ router.get('/:buyer_id/current-orders', verifyToken, isBuyer, isSameBuyer, async
 		if (buyer_id) {
 			await res.json(await buyer_obj.getOngoingOrders(buyer_id));
 		} else {
+			console.log({"msg": "failed. Could not get current orders", "buyer_id": buyer_id});
 			await res.status(404).json({"msg": "buyer not found"});
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -123,6 +133,7 @@ router.post('/login', async (req, res) => {
 		}
 		res.header('x-access-token', token).status(200).json(result);
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -148,12 +159,14 @@ router.post('/', async (req, res) => {
 			reply = {"status": "success", "buyer_id": buyer_id};
 			code = 201;
 		} else {
+			console.log({"msg": "failed. to update buyer", "buyer_id": buyer_id});
 			reply = {"status": "failed"};
 			code = 400;
 		}
 		let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
 		res.header('x-access-token', token).status(code).json(reply);
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -194,6 +207,7 @@ router.put('/:buyer_id/password', verifyToken, isBuyer, isSameBuyer, async (req,
 			await res.status(404).json({"msg": "invalid buyer id"})
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 

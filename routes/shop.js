@@ -23,6 +23,7 @@ router.get('/', verifyToken, async (req, res) => {
 			await res.json(await shop_obj.getAllShops());
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -41,6 +42,7 @@ router.get('/:category', verifyToken, async (req, res) => {
 			await res.json(await shop_obj.getAllShopsByCategory(category));
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -120,6 +122,7 @@ router.put('/:shop_id/password', verifyToken, isShop, isSameShop, async (req, re
 			await res.status(404).json({"msg": "invalid shop id"})
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -142,6 +145,7 @@ router.post('/login', async (req, res) => {
 		}
 		res.header('x-access-token', token).status(200).json(result);
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });

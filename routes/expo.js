@@ -11,6 +11,7 @@ router.post('/send', async (req, res) => {
 		let val = await expo.sendMessage(push_token, message, data_obj);
 		await res.json({"msg": val})
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 

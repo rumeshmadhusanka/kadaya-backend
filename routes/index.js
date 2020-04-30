@@ -9,6 +9,7 @@ module.exports = function (app) {
     app.use("/expo",require("./expo"));
     app.use("/update",require("./app_update"));
     app.use("/", (req, res) => {
+        console.log("Default route");
         res.status(404).json({"message": "Default Route"})
     });
 };

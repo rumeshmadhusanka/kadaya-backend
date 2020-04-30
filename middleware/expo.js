@@ -11,6 +11,7 @@ class ExpoMessenger {
 			try {
 				let messages = [];
 				if (!Expo.isExpoPushToken(pushToken)) {
+					console.log(`Push token ${pushToken} is not a valid Expo push token`);
 					reject(new Error(`Push token ${pushToken} is not a valid Expo push token`));
 				} else {
 					messages.push({
@@ -30,6 +31,7 @@ class ExpoMessenger {
 							// documentation:
 							// https://docs.expo.io/versions/latest/guides/push-notifications#response-format
 						} catch (e) {
+							console.error(e);
 							reject(e)
 						}
 					}

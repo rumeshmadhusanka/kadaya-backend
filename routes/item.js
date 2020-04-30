@@ -9,6 +9,7 @@ router.get('/', verifyToken, async (req, res) => {
 	try {
 		await res.json(await item_obj.getAllItems());
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -19,16 +20,18 @@ router.get('/search/', verifyToken, async (req, res) => {
 	try {
 		await res.json(await item_obj.findItemByName(keyword));
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
 
 router.get('/shop/:shop_id', verifyToken, async (req, res) => {
 	let shop_id = req.params.shop_id;
-	console.log(shop_id)
+	console.log(shop_id);
 	try {
 		await res.json(await item_obj.getAllItemsInAShop(shop_id));
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -49,10 +52,12 @@ router.post('/', verifyToken, isShop, isSameShop, async (req, res) => {
 		if (result.rowCount === 1) {
 			await res.status(201).json({"msg": "success"});
 		} else {
+			console.log({"msg": "failed to add item", "shop_id": shop_id});
 			await res.status(502).json({"msg": "failed"});
 		}
 
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -65,9 +70,11 @@ router.delete('/:id', verifyToken, async (req, res) => {
 		if (result.rowCount === 1 || result.rowCount === 0) {
 			await res.json({"msg": "success"});
 		} else {
-			await res.status(502).json({"msg": "failed"});
+			console.log({"msg": "failed", "item_id": id});
+			await res.status(502).json({"msg": "failed to delete"});
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -88,9 +95,11 @@ router.put('/:id', verifyToken, async (req, res) => {
 		if (result.rowCount === 1) {
 			await res.json({"msg": "success"});
 		} else {
-			await res.status(502).json({"msg": "failed"});
+			console.log({"msg": "failed", "item_id": id});
+			await res.status(502).json({"msg": "failed to update", "item_id": id});
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -103,6 +112,7 @@ router.put('/:id/amount/:value', verifyToken, async (req, res) => {
 		if (result.rowCount === 1) {
 			await res.json({"msg": "success"});
 		} else {
+			console.log({"msg": "failed to update item", "item_id": id});
 			await res.status(502).json({"msg": "failed"});
 		}
 	} catch (e) {

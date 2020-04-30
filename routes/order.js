@@ -20,6 +20,7 @@ router.get('/:order_id', verifyToken, async (req, res) => {
 		result1["shop_details"] = await shop_obj.getShopById(result1["shop_id"]);
 		await res.json(result1);
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -29,6 +30,7 @@ router.get('/buyer/:buyer_id/ongoing', verifyToken, isBuyer, isSameBuyer, async 
 	try {
 		await res.json(await order_obj.getOngoingOrdersByIdForBuyer(buyer_id));
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -38,6 +40,7 @@ router.get('/buyer/:buyer_id/history', verifyToken, isBuyer, isSameBuyer, async 
 	try {
 		await res.json(await order_obj.getOrderHistoryByIdForBuyer(buyer_id));
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -47,6 +50,7 @@ router.get('/shop/:shop_id/ongoing', verifyToken, isShop, isShop, async (req, re
 	try {
 		await res.json(await order_obj.getOngoingOrdersByIdForShop(shop_id));
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -55,6 +59,7 @@ router.get('/shop/:shop_id/history', verifyToken, isShop, isShop, async (req, re
 	try {
 		await res.json(await order_obj.getOrderHistoryByIdForShop(shop_id));
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -92,6 +97,7 @@ router.post('/', verifyToken, isBuyer, isSameBuyer, async (req, res) => {
 
 		res.status(code).json(reply);
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -131,10 +137,11 @@ router.put('/:id', verifyToken, async (req, res) => {
 			}
 
 		} catch (e) {
-			console.log("Message could not be sent")
+			console.log("Message could not be sent :" + shops_reply)
 		}
 		await res.json({"msg": out})
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 
@@ -153,6 +160,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
 			new Error("Error sql unknown")
 		}
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 

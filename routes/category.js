@@ -10,6 +10,7 @@ router.get('/', verifyToken, async (req, res) => {
 	try {
 		await res.json(await category_obj.getAll());
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
@@ -21,6 +22,7 @@ router.get('/:category/shops', verifyToken, async (req, res) => {
 	try {
 		await res.json(await shop_obj.getShopsNearLocationByCategory(lat, long, radius, category));
 	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})
 	}
 });
