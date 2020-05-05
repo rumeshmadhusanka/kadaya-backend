@@ -79,8 +79,9 @@ class Buyer {
                                 state
                          FROM public.order
                                   left outer join public.shop on shop.shop_id = "order".shop_id
-                         where buyer_id = ($1) AND state = 'COMPLETED'
-                            OR state = 'CANCELLED'`;
+                         where buyer_id = ($1)
+                           AND (state = 'COMPLETED'
+                             OR state = 'CANCELLED')`;
 		return new Promise(async (resolve, reject) => {
 			try {
 				let {rows} = await pg_pool.query(query_str, [buyer_id]);
