@@ -154,17 +154,23 @@ router.post('/', async (req, res) => {
 	let reply;
 	let code;
 	try {
-		let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password_hash, expo_token);
-		if (result.rowCount === 1) {
-			reply = {"status": "success", "buyer_id": buyer_id};
-			code = 201;
+
+		let exists = await buyer_obj.getBuyerIdByPhone(phone);
+		if (exists.rowCount === 1) {
+			res.status(403).json({"msg": "An account is registered with this phone number. Kindly login to proceed."});
 		} else {
-			console.log({"msg": "failed. to update buyer", "buyer_id": buyer_id});
-			reply = {"status": "failed"};
-			code = 400;
+			let result = await buyer_obj.signup(buyer_id, name, email, address, phone, latitude, longitude, password_hash, expo_token);
+			if (result.rowCount === 1) {
+				reply = {"status": "success", "buyer_id": buyer_id};
+				code = 201;
+			} else {
+				console.log({"msg": "failed. to update buyer", "buyer_id": buyer_id});
+				reply = {"status": "failed"};
+				code = 400;
+			}
+			let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
+			res.header('x-access-token', token).status(code).json(reply);
 		}
-		let token = jwt.sign({"buyer_id": buyer_id}, config.secret);
-		res.header('x-access-token', token).status(code).json(reply);
 	} catch (e) {
 		console.log({"msg": e.name + " " + e.message});
 		await res.status(502).json({"msg": e.name + " " + e.message})

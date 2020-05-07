@@ -173,18 +173,23 @@ router.post('/', async (req, res) => {
 	let reply;
 	let code;
 	try {
-		let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password_hash, phone, category, open_hours, is_open, contact_numbers, expo_token);
-		if (result.rowCount === 1) {
-			reply = {"msg": "success", "shop_id": shop_id};
-			code = 200;
+		let exists = await shop_obj.getShopIdByPhone(phone);
+		if (exists.rowCount === 1) {
+			res.status(403).json({"msg": "An account is registered with this phone number. Kindly login to proceed."});
 		} else {
-			reply = {"msg": "failed"};
-			code = 400;
+			let result = await shop_obj.addNewShop(shop_id, name, address, latitude, longitude, comments, photo_id, owner_name, email, password_hash, phone, category, open_hours, is_open, contact_numbers, expo_token);
+			if (result.rowCount === 1) {
+				reply = {"msg": "success", "shop_id": shop_id};
+				code = 200;
+			} else {
+				reply = {"msg": "failed"};
+				code = 400;
+			}
+			let token = jwt.sign({"shop_id": shop_id}, config.secret);
+			res.header('x-access-token', token).status(code).json(reply);
 		}
-		let token = jwt.sign({"shop_id": shop_id}, config.secret);
-		res.header('x-access-token', token).status(code).json(reply);
 	} catch (e) {
-		res.status(404).json({"msg": e.name + " " + e.message})
+		res.status(502).json({"msg": e.name + " " + e.message});
 		console.log({"msg": e.name + " " + e.message})
 	}
 });

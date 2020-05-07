@@ -234,6 +234,22 @@ class Buyer {
 
 	}
 
+	async getBuyerIdByPhone(phone) {
+		let query_str = "SELECT buyer_id FROM public.buyer where phone=($1)";
+		return new Promise(async (resolve, reject) => {
+			try {
+				let result = await pg_pool.query(query_str, [phone]);
+				//console.log(result);
+				resolve(result);
+			} catch (e) {
+				reject(e)
+
+			}
+
+		})
+
+	}
+
 
 }
 
