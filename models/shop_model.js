@@ -219,16 +219,33 @@ class Shop {
 		let query_str = 'SELECT shop_id FROM public.shop where phone = ($1)';
 		return new Promise(async (resolve, reject) => {
 			try {
-				let result = await pg_pool.query(query_str, [phone]);
-				console.log(result);
-				resolve(result);
-			} catch (e) {
-				reject(e)
+                let result = await pg_pool.query(query_str, [phone]);
+                console.log(result);
+                resolve(result);
+            } catch (e) {
+                reject(e)
 
-			}
+            }
 
-		})
-	}
+        })
+    }
+
+
+    async passwordReset(phone, new_password) {
+        let query_str = "UPDATE public.shop SET password=($2) where phone=($1)";
+        return new Promise(async (resolve, reject) => {
+            try {
+                let result = await pg_pool.query(query_str, [phone, new_password]);
+                //console.log(result);
+                resolve(result);
+            } catch (e) {
+                reject(e)
+
+            }
+
+        })
+
+    }
 }
 
 module.exports = Shop;

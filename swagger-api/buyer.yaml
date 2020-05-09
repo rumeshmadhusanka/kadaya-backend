@@ -300,4 +300,37 @@ paths:
           description: Updated
         502:
           description: Server Error
+  /buyer/password-reset:
+    post:
+      summary: Password Reset
+      tags:
+        - Buyer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: json body
+          schema:
+            type: object
+            required:
+              - password
+              - phone
+            properties:
+              password:
+                type: string
+                example: abc
+              phone:
+                type: string
+                example: 0786745678
+      responses:
+        200:
+          description: Updated
+        404:
+          description: Failed
+        502:
+          description: Server Error
+
 

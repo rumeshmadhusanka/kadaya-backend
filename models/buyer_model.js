@@ -251,6 +251,23 @@ class Buyer {
 	}
 
 
+	async passwordReset(phone, new_password) {
+		let query_str = "UPDATE public.buyer SET password=($2) where phone=($1)";
+		return new Promise(async (resolve, reject) => {
+			try {
+				let result = await pg_pool.query(query_str, [phone, new_password]);
+				//console.log(result);
+				resolve(result);
+			} catch (e) {
+				reject(e)
+
+			}
+
+		})
+
+	}
+
+
 }
 
 module.exports = Buyer;

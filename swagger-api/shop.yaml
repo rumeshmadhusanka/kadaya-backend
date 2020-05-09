@@ -312,5 +312,38 @@ paths:
           description: Bad Request
         502:
           description: Server Error
+  /shop/password-reset:
+    post:
+      summary: Password Reset
+      tags:
+        - Shop
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: json body
+          schema:
+            type: object
+            required:
+              - password
+              - phone
+            properties:
+              password:
+                type: string
+                example: abc
+              phone:
+                type: string
+                example: 0786745678
+      responses:
+        200:
+          description: Updated
+        404:
+          description: Failed
+        502:
+          description: Server Error
+
 
 

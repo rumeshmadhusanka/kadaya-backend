@@ -194,5 +194,23 @@ router.post('/', async (req, res) => {
 	}
 });
 
+router.post('/password-reset', async (req, res) => {
+	try {
+		let phone = req.body.phone;
+		let password = req.body.password;
+		let hashed_password = bcrypt.hashSync(password);
+
+		let result = await shop_obj.passwordReset(phone, hashed_password);
+		if (result.rowCount === 1) {
+			res.status(200).json({"msg": "success"});
+		} else {
+			res.status(404).json({"msg": "failed"});
+		}
+	} catch (e) {
+		console.log({"msg": e.name + " " + e.message});
+		await res.status(502).json({"msg": e.name + " " + e.message})
+	}
+});
+
 
 module.exports = router;
